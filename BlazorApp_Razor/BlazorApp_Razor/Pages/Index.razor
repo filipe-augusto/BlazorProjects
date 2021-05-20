@@ -1,0 +1,38 @@
+﻿@page "/"
+
+<h1>Olá, @nome </h1>
+<h1> data e hora : @DateTime.Today </h1>
+<h1> dia da semana: @data.ToUpper()</h1>
+<hr />
+<h1>@Saudacao(nome)</h1>
+<h1> 2+2 = @(2+2) </h1>
+<button @onclick="@TrataCliqueBotao"> Clique aqui</button>
+
+<table style="width:100%;">
+    <tr>
+        <td>nome</td>
+        <td>telefone</td>
+        <td>genero</td>
+    </tr>
+    <tr><td>cassila</td><td>11 22335577</td><td>feminino</td></tr>
+    <tr><td>maria eunice</td><td>11 98773321</td><td>feminino</td></tr>
+</table>
+
+<input id="Button1" type="button" value="button" />
+
+
+@code{
+    string nome = "Filipe Augusto";
+    private string data = DateTime.Now.DayOfWeek.ToString();
+
+    private string Saudacao(string nome)
+    {
+        var mensagem = "Bem vindo " + nome.ToUpper();
+        return mensagem;
+    }
+
+    private void TrataCliqueBotao()
+    {
+        Console.WriteLine("Fui clicado!");
+    }
+}
