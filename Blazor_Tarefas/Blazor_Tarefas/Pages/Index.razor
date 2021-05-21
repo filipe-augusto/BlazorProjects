@@ -1,0 +1,17 @@
+﻿@page "/"
+@inject HttpClient http
+
+@code{
+    public class Tarefa
+    {
+        public Guid Id { get; set; }
+        public string Descricao { get; set; }
+        public bool Concluida  { get; set; }
+        public DateTime DataCricao { get; set; }
+    }
+
+    private string novaTarefa = "";
+    private List<Tarefa> tarefas = new List<Tarefa>();
+
+
+}
