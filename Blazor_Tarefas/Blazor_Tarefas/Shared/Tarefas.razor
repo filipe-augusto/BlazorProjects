@@ -1,0 +1,100 @@
+﻿<h1>@Titulo</h1>
+
+@if (tarefas == null)
+{
+    @*<img src="https://media3.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif?cid=ecf05e47salf0pbcvifjuc8o9wahqmw4y3rciirmubroxdsy&rid=giphy.gif&ct=g" alt="Alternate Text" />*@
+    @*<Alerta Mensagem="Carregando..." >
+            <span style="color:blue"> Carregando tarefas...</span>
+        </Alerta>*@
+    <Alerta>
+        <Conteudo1>
+            <img src="https://media3.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif?cid=ecf05e47salf0pbcvifjuc8o9wahqmw4y3rciirmubroxdsy&rid=giphy.gif&ct=g" alt="Alternate Text" />
+            <h1>Aguarde...</h1>
+        </Conteudo1>
+        <Conteudo2>
+
+            <h1>Carregando...</h1>
+        </Conteudo2>
+    </Alerta>
+
+    @*<p> Carregando...</p>*@
+}
+else if (!tarefas.Any())
+{
+    <Alerta>
+        <Conteudo1>
+            <img src="https://media3.giphy.com/media/53QGAMuHBOI8BkRUTk/200w.webp?cid=ecf05e4714dh4zypab98qus3pu7j79ngtxbvejce37mkj44s&rid=200w.webp&ct=g" alt="Alternate Text" />
+            <h1>Ainda não existem registros</h1>
+        </Conteudo1>
+        <Conteudo2>
+            <h2>Inclua algumas tarefas...</h2>
+        </Conteudo2>
+    </Alerta>
+
+    @*<Alerta Mensagem="Ainda não existem tarefas..." >
+        <div class="card">
+            <div class="card-body">
+                Você precisa cadastrar algumas tarefas.
+            </div>
+        </div>
+        </Alerta>*@
+
+    @*<p> Ainda não existem tarefas...</p>*@
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Ação</th>
+                <th scope="col">Data</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Concluida</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in tarefas)
+            {
+                <tr>
+
+                    <TarefaIndividual item="item" RemoverTarefa="RemoveTarefa" />
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+@if (tarefas != null)
+{
+    <div class="form-group">
+        <label> Tarefa</label>
+        <input type="text" @bind="novaTarefa" />
+        <button class="btn btn-primary" @onclick="AdicionarNovaTarefa"> Registrar nova tarefa</button>
+    </div>
+}
+
+@code{
+
+    [Parameter] public List<Tarefa> tarefas { get; set; }
+    [Parameter] public string Titulo { get; set; }
+
+
+    private string novaTarefa = "";
+    //private List<Tarefa> tarefas = new List<Tarefa>();
+
+    void AdicionarNovaTarefa()
+    {
+        tarefas.Add(new Tarefa
+        {
+            DataCricao = DateTime.Now,
+            Descricao = novaTarefa,
+            Id = Guid.NewGuid()
+        });
+        novaTarefa = "";
+    }
+    private void RemoveTarefa(Tarefa tarefa)
+    {
+        tarefas.Remove(tarefas.First(x => x.Id == tarefa.Id));
+    }
+
+}

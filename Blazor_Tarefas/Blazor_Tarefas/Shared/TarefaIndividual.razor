@@ -1,0 +1,14 @@
+﻿<td>
+    <button @onclick="@(() => RemoverTarefa.InvokeAsync(item))">
+        <i class="oi oi-trash"></i>
+    </button>
+</td>
+<td>@item.DataCricao</td>
+<td>@item.Descricao</td>
+<td><input type="checkbox" @bind="item.Concluida" />@item.Concluida.</td>
+@code{
+    [Parameter] public Tarefa item { get; set; }
+    //passagem de um evento como paremetro
+    [Parameter] public EventCallback<Tarefa> RemoverTarefa { get; set; }
+    
+}
