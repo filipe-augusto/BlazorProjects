@@ -1,0 +1,30 @@
+﻿@page "/counter"
+@inject ServicoSingleton singleton
+@inject ServicoScoped scoped
+@inject ServicoTransient transient
+<h1>Counter</h1>
+
+<p>Current count: @currentCount</p>
+<hr/>
+<p>
+    Singleton count : @singleton.Valor
+</p>
+<p>
+    Scoped count : @scoped.Valor
+</p>
+<p>
+    Transiet count : @transient.Valor
+</p>
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+        singleton.Valor = currentCount;
+        scoped.Valor = currentCount;
+        transient.Valor = currentCount;
+    }
+}

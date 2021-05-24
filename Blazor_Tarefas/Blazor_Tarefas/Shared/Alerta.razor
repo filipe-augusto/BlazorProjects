@@ -1,16 +1,7 @@
-﻿@*<div class="alert alert-danger mt-4" role="alert">
-        <span class="oi oi-circle-x mr-2" araia-hidden="true"></span>
-        <strong>@Mensagem</strong>
-    </div>
-
-    <div>
-        @ChildContent
-    </div>*@
-
-<div>
-    @if (Conteudo1 == null)
+﻿<div>
+    @if(Conteudo1 == null)
     {
-        <span style="color:black"> Texto padrão</span>
+        <span style="color:black">Texto Padrão</span>
     }
     else
     {
@@ -20,7 +11,7 @@
 <div>
     @if (Conteudo2 == null)
     {
-        <span style="color:black"> Texto padrão</span>
+        <span style="color:black">Texto Padrão</span>
     }
     else
     {
@@ -29,9 +20,6 @@
 </div>
 
 @code {
-    [Parameter] public string Mensagem { get; set; }
-    [Parameter] public RenderFragment ChildContent { get; set; }
-
     [Parameter] public RenderFragment Conteudo1 { get; set; }
     [Parameter] public RenderFragment Conteudo2 { get; set; }
 }
