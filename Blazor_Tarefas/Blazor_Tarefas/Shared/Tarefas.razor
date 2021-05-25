@@ -1,4 +1,6 @@
-﻿<h1>@Titulo</h1>
+﻿@inject IJSRuntime js
+
+<h1>@Titulo</h1>
 
     <table class="table">
         <thead>
@@ -35,12 +37,24 @@
 
     private string novaTarefa = "";
 
-    private void RemoveTarefa(Tarefa tarefa)
+    private async  Task RemoveTarefa(Tarefa tarefa)
     {
-        tarefas.Remove(tarefas.First(x => x.ID == tarefa.ID));
+        // tarefas.Remove(tarefas.First(x => x.ID == tarefa.ID));
+        //var resultado =
+        //     await js.InvokeAsync<bool>("confirm", "Exluir Tarefa?");
+
+        var resultado = ((IJSInProcessRuntime)js).Invoke<bool>("confirm", "exluir esta tarefa?");
+        if (resultado)
+        {
+            tarefas.Remove(tarefa);
+            //  await js.InvokeVoidAsync("alert", "Tarefa excluida com sucesso");
+            await js.InvokeAsync<object>("MostraAlerta","Ok, tarefa excluida!!!");
+        }
     }
 
-    void AdicionarNovaTarefa()
+    static int totalTarefa = 0;
+
+    async void AdicionarNovaTarefa()
     {
         if (!string.IsNullOrWhiteSpace(novaTarefa))
         {
@@ -51,6 +65,21 @@
                 ID = Guid.NewGuid()
             });
             novaTarefa = "";
+            totalTarefa = tarefas.Count();
+        //    await js.InvokeVoidAsync("getTotalTarefas");
+        await js.InvokeAsync<int>("getTotalTarefasInstancia",DotNetObjectReference.Create(this.))
         }
+    }
+
+    [JSInvokable]
+    public static Task<int> ObterTotalTarefasInstancia()
+    {
+        return Task.FromResult(totalTarefa);
+    }
+
+    [JSInvokable]
+    public static Task<int> ObterTotalTarefas()
+    {
+        return Task.FromResult(totalTarefa);
     }
 }
