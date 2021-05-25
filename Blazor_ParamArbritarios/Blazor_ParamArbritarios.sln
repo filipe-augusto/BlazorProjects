@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31313.79
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor_ParamArbritarios", "Blazor_ParamArbritarios\Blazor_ParamArbritarios.csproj", "{DC28B677-D84D-4F2D-9372-405B50CAC3ED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DC28B677-D84D-4F2D-9372-405B50CAC3ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC28B677-D84D-4F2D-9372-405B50CAC3ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC28B677-D84D-4F2D-9372-405B50CAC3ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC28B677-D84D-4F2D-9372-405B50CAC3ED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9B81BCA0-2C97-4A3B-8A42-8740D3FA0081}
+	EndGlobalSection
+EndGlobal
