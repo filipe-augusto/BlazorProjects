@@ -1,25 +1,27 @@
-﻿@inject IJSRuntime js
+﻿<h1>@Titulo</h1>
 
-<h1>@Titulo</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ação</th>
+            <th>Data</th>
+            <th>Descriçao</th>
+            <th>Concluida</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ListaGenerica ListaItem="tarefas">
+            <Lista Context="tarefa">
+                <TarefaIndividual item="tarefa" RemoverTarefa="RemoveTarefa" />
+            </Lista>
+        </ListaGenerica>
+    </tbody>
+</table>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Ação</th>
-                <th>Data</th>
-                <th>Descriçao</th>
-                <th>Concluida</th>
-            </tr>
-        </thead>
-        <tbody>
-           <ListaGenerica ListaItem="tarefas">
-               <Lista Context="tarefa">
-                    <TarefaIndividual item="tarefa" RemoverTarefa="RemoveTarefa"/>
-               </Lista>
-           </ListaGenerica>
-        </tbody>
-    </table>
-
+<Confirma @ref="confirmacao" onCancela="CancelaConfirmacao" 
+          onConfirma="RemoverTarefaConfirmacao">
+    <div>Deseja Excluir esta tarefa ?</div>
+</Confirma>
 
 @if (tarefas != null)
 {
@@ -37,24 +39,32 @@
 
     private string novaTarefa = "";
 
-    private async  Task RemoveTarefa(Tarefa tarefa)
-    {
-        // tarefas.Remove(tarefas.First(x => x.ID == tarefa.ID));
-        //var resultado =
-        //     await js.InvokeAsync<bool>("confirm", "Exluir Tarefa?");
+    //instancia do componente Confirma 
+    Confirma confirmacao;
 
-        var resultado = ((IJSInProcessRuntime)js).Invoke<bool>("confirm", "exluir esta tarefa?");
-        if (resultado)
-        {
-            tarefas.Remove(tarefa);
-            //  await js.InvokeVoidAsync("alert", "Tarefa excluida com sucesso");
-            await js.InvokeAsync<object>("MostraAlerta","Ok, tarefa excluida!!!");
-        }
+    Tarefa tarefaRemover;
+
+    private void RemoveTarefa(Tarefa tarefa)
+    {
+        confirmacao.Exibir();
+        tarefaRemover = tarefa;
+        
     }
 
-    static int totalTarefa = 0;
+    void RemoverTarefaConfirmacao()
+    {
+        tarefas.Remove(tarefaRemover);
+        tarefaRemover = null;
+        confirmacao.Ocultar();
+    }
 
-    async void AdicionarNovaTarefa()
+    void CancelaConfirmacao()
+    {
+        confirmacao.Ocultar();
+        tarefaRemover = null;
+    }
+
+    void AdicionarNovaTarefa()
     {
         if (!string.IsNullOrWhiteSpace(novaTarefa))
         {
@@ -65,21 +75,6 @@
                 ID = Guid.NewGuid()
             });
             novaTarefa = "";
-            totalTarefa = tarefas.Count();
-        //    await js.InvokeVoidAsync("getTotalTarefas");
-        await js.InvokeAsync<int>("getTotalTarefasInstancia",DotNetObjectReference.Create(this.))
         }
-    }
-
-    [JSInvokable]
-    public static Task<int> ObterTotalTarefasInstancia()
-    {
-        return Task.FromResult(totalTarefa);
-    }
-
-    [JSInvokable]
-    public static Task<int> ObterTotalTarefas()
-    {
-        return Task.FromResult(totalTarefa);
     }
 }
