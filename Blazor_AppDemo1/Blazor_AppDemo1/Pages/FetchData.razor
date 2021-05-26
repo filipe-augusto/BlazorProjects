@@ -1,0 +1,59 @@
+﻿@page "/fetchdata"
+@inject HttpClient Http
+
+<h1><Aviso Exibir="Exibir" >
+    @Mensagem
+    </Aviso></h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <MeuGrid itens="@forecasts">
+        <Cabecalho>
+            <th>Data</th>
+            <th>Temp(Celsius)</th>
+            <th>Resumo</th>            
+        </Cabecalho>
+        <Linha Context="forecast">
+            <td>@forecast.Date</td>
+            <td><center>@forecast.TemperatureC</center></td>
+            <td>@forecast.Summary </td>
+        </Linha>
+        <Rodape>
+            <td colspan="3">
+                <Aviso Exibir="@Exibir">
+                    @Mensagem
+                </Aviso>
+            </td>
+        </Rodape>
+    </MeuGrid>
+
+}
+
+@code {
+
+    bool Exibir = true;
+    public string Mensagem { get; set; } = "Previsão do tempo";
+    private WeatherForecast[] forecasts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+    }
+
+    public class WeatherForecast
+    {
+        public DateTime Date { get; set; }
+
+        public int TemperatureC { get; set; }
+
+        public string Summary { get; set; }
+
+        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    }
+}
