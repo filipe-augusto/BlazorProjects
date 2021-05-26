@@ -1,0 +1,23 @@
+﻿@page "/formulario1"
+
+<h3>Meu primeiro formulario blazor</h3>
+<EditForm Model="@usuario" onSubmit="Submeter">
+    <label form="nome">usuario</label>
+    <InputText id="nome" @bind-Value="usuario.Nome"></InputText>
+    <br />
+    <label form="nome">Email</label>
+    <InputText id="nome" @bind-Value="usuario.Email"></InputText>
+    <br />
+    <label form="nome">Idade</label>
+    <InputNumber id="nome" @bind-Value="usuario.Idade"></InputNumber>
+    <br />
+    <input type="submit"  value="Enviar Formulario" class="btn-primary"/>
+
+</EditForm>
+@code {
+    Usuario usuario = new Usuario();
+    private void Submeter()
+        {
+        Console.WriteLine($"Submit : {usuario.Nome} - {usuario.Email} - {usuario.Idade}");
+        }
+}
