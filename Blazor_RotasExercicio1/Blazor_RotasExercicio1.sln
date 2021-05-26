@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31313.79
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor_RotasExercicio1", "Blazor_RotasExercicio1\Blazor_RotasExercicio1.csproj", "{18CA9570-9192-4248-9E43-3F4B06A203FE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{18CA9570-9192-4248-9E43-3F4B06A203FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18CA9570-9192-4248-9E43-3F4B06A203FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18CA9570-9192-4248-9E43-3F4B06A203FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18CA9570-9192-4248-9E43-3F4B06A203FE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B13B44B5-250B-498A-B8EA-6B594A4B0D14}
+	EndGlobalSection
+EndGlobal

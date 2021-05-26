@@ -1,0 +1,22 @@
+﻿@page "/welcome"
+@page "/welcome-back/{nome}"
+@page "/welcome-ticket/{numero:int}/{nome}"
+@page "/welcome-ticket/{numero:int}"
+
+
+<h1>Bem-Vindo de Volta @Nome</h1>
+<h5>Prazer em vê-lo novamente! </h5>
+<p>O valor do seu ticket é @Numero</p>
+
+@code{
+    [Parameter]
+    public string Nome { get; set; } = "Filipe";
+    [Parameter]
+    public int Numero { get; set; } = 0;
+
+    private void incrementCount()
+    {
+        Nome = Nome ?? "Sem nome";
+        Numero = Numero;
+    }
+}
