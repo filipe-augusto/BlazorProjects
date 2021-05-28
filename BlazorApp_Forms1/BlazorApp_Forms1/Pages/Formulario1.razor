@@ -10,35 +10,71 @@
     CreditCardAttribute -- valida se o conteudo de uma propriedade é um numero de cartao de credito
     UrlAttribute -- validade se o conteudo de uma propriedade é uma URL
     RegularExpressionAttribute valida se o conteudo da propriedade combina com uma determinada expressão regular
+    
+    validationSummary -- mostra uma lista abrangente de todos os erros no formulario
+    validationMessage -- validationMessage para exibir mensagens de erro para uma entrada
+    especifica no formulario
 
-
+    --------------------
+    Expressões lambdas
+    <validationMessage For="()=> usuario.nome"/>
+    <validationMessage for="(()=>usuario.nome)"/>
 *@
 <h1>Meu primeiro formulário Blazor</h1>
 
-<EditForm Model="@usuario">
+
+@if (ultimoSubmit !=null)
+{
+    <h1>
+        Status do ultimo submit :@ultimoSubmit
+    </h1>
+}
+
+@*<EditForm Model="@usuario" OnValidSubmit="@ValidFormSubmetido" 
+          OnInvalidSubmit="@InvalidFormSubmetido">*@
+<EditForm Model="@usuario" OnSubmit="@OnSubmitForm">
     <DataAnnotationsValidator />
+    <ValidationSummary/>
 
     <div class="form-group">
         <label form="nome">Nome</label>
         <InputText id="nome" @bind-Value="usuario.Nome" class="form-control" />
+        <ValidationMessage For="()=>usuario.Nome"/>
     </div>
     <div class="form-group">
         <label form="email">Email</label>
         <InputText id="email" @bind-Value="usuario.Email" class="form-control" />
+        <ValidationMessage For="@(()=>usuario.Nome)" />
     </div>
     <div class="form-group">
         <label form="idade">Idade</label>
         <InputNumber id="idade" @bind-Value="usuario.Idade" class="form-control" />
+        <ValidationMessage For="()=>usuario.Nome" />
     </div>
     <input type="submit" value="Enviar Formulário" class="btn-primary" />
 </EditForm>
 
 @code {
     Usuario usuario = new Usuario();
+    string ultimoSubmit;
 
-    //private void Submeter()
-    //{
-    //    Console.WriteLine($"Submit : {usuario.Nome} - {usuario.Email} - {usuario.Idade}");
-    //}
+    void ValidFormSubmetido(EditContext editContext)
+    {
+        ultimoSubmit = $"OnvalidSubmit foi executado. " +
+    $"O formulario é valido ={editContext.Validate()}";
+    }
+
+    void InvalidFormSubmetido(EditContext editContext)
+    {
+        ultimoSubmit = $"OnInvalidSubmit foi executado. " +
+    $"O formulario é valido ={editContext.Validate()}";
+    }
+    void OnSubmitForm(EditContext editContext)
+    {
+        bool formIsValid = editContext.Validate();
+        ultimoSubmit = formIsValid ? "Sucesso - formulario valido" : 
+            "Falhou - formulário inválido";
+    }
+
 
 }

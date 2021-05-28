@@ -1,0 +1,148 @@
+﻿@page "/registraUsuario"
+@page "/registra"
+
+<h1> Registrar Usuario</h1>
+#<!-- #region EU QUE FIZ -->
+@*<h1>
+        @ultimoSubmit
+    </h1>*@
+@*<EditForm Model="@usuario"
+              OnValidSubmit="@ValidoFormSubmetido"
+              OnInvalidSubmit="@InvalidoFormSubmetido">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            <label form="nome">Nome</label>
+            <InputText id="nome" @bind-Value="usuario.Nome" class="form-control" />
+            <ValidationMessage For="()=>usuario.Nome" />
+        </div>
+        <div class="form-group">
+            <label form="sobrenome">Sobrenome</label>
+            <InputText id="sobrenome" @bind-Value="usuario.Sobrenome" class="form-control" />
+            <ValidationMessage For="()=>usuario.Sobrenome" />
+        </div>
+        <div class="form-group">
+            <label form="idade">Idade</label>
+            <InputNumber id="idade" @bind-Value="usuario.Idade" class="form-control" />
+            <ValidationMessage For="()=>usuario.Idade" />
+        </div>
+        <div class="form-group">
+            <label form="login">Login</label>
+            <InputText id="login" @bind-Value="usuario.Login" class="form-control" />
+            <ValidationMessage For="@(()=>usuario.Login)" />
+        </div>
+        <div class="form-group">
+            <label form="email">E-mail</label>
+            <InputText id="email" @bind-Value="usuario.Email" class="form-control" />
+            <ValidationMessage For="@(()=> usuario.Email)" />
+        </div>
+        <div class="form-group">
+            <label form="perfil">Perfil</label>
+            <InputSelect id="perfil" @bind-Value="usuario.Perfil" class="form-control">
+                <option value="Admin" class="form-control">Admin</option>
+                <option value="Padrao"> Padrao</option>
+            </InputSelect>
+            <ValidationMessage For="@(()=> usuario.Perfil)" />
+        </div>
+        <div class="form-group">
+            <label form="password">PassWord</label>
+            <InputText type="password" id="password" @bind-Value="usuario.Password" class="form-control" />
+            <ValidationMessage For="@(()=> usuario.Password)" />
+        </div>
+        <div class="form-group">
+            <label form="confirmPassword">Confirm passWord</label>
+            <InputText type="password" id="confirmassword" @bind-Value="usuario.ConfirmaPassword" class="form-control" />
+            <ValidationMessage For="@(()=> usuario.ConfirmaPassword)" />
+        </div>
+        <input type="submit" value="enviar Formulario" class="btn btn-primary" />
+    </EditForm>*@
+
+<!-- #endregion -->
+@if (ultimoSubmit != null)
+{
+    <h4>
+        Status do último Submit : @ultimoSubmit
+    </h4>
+}
+
+<EditForm Model="@user" OnValidSubmit="@OnValidSubmitLogin"
+          OnInvalidSubmit="@OnInvalidSubmitLogin">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="firstName">Nome</label>
+            <InputText type="text" class="form-control" @bind-Value="user.Nome" placeholder="Nome" />
+            <ValidationMessage For="@(() => @user.Nome)" />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="lastName">Sobrenome</label>
+            <InputText type="text" class="form-control" @bind-Value="user.Sobrenome" placeholder="Sobrenome" />
+            <ValidationMessage For="@(() => @user.Sobrenome)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="username">Login</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"></span>
+            </div>
+            <InputText @bind-Value="user.Login" class="form-control" placeholder="Login" />
+            <ValidationMessage For="@(() => @user.Login)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="username">Idade</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"></span>
+            </div>
+            <InputNumber @bind-Value="user.Idade" class="form-control" placeholder="18" />
+            <ValidationMessage For="@(() => @user.Idade)" />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="perfil">Perfil</label>
+        <p>
+            <InputSelect id="perfil" @bind-Value="user.Perfil" class="form-control">
+                <option value="">Selecione o Perfil...</option>
+                <option value="Admin">Administrador</option>
+                <option value="User">Usuário</option>
+            </InputSelect>
+        </p>
+        <ValidationMessage For="@(() => @user.Perfil)" />
+    </div>
+    <div class="mb-3">
+        <label for="email">Email</label>
+        <InputText type="email" class="form-control" @bind-Value="user.Email" placeholder="nome@exemplo.com" />
+        <ValidationMessage For="@(() => @user.Email)" />
+    </div>
+    <div class="mb-3">
+        <label for="password">Password</label>
+        <InputText type="password" class="form-control" @bind-Value="user.Password" />
+        <ValidationMessage For="@(() => @user.Password)" />
+    </div>
+    <div class="mb-3">
+        <label for="confirm-password">Confirma Password</label>
+        <InputText type="password" class="form-control" @bind-Value="user.ConfirmaPassword" />
+        <ValidationMessage For="@(() => @user.ConfirmaPassword)" />
+    </div>
+    <hr class="mb-4">
+    <button class="btn btn-primary btn-lg btn-block" type="submit">Registrar</button>
+</EditForm>
+
+
+@code{
+    Usuario user = new Usuario();
+    string ultimoSubmit;
+   public void OnValidSubmitLogin(EditContext editContext)
+    {
+        ultimoSubmit = "OnvalidSubmit foir executado. " +
+            $"O formulario é {editContext.Validate()}";
+    }
+  public  void OnInvalidSubmitLogin(EditContext editContext)
+    {
+        ultimoSubmit = "invalidoFormSubmetido foi executado" +
+            $"o formualrio é {editContext.Validate()}";
+    }
+}
