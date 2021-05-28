@@ -1,4 +1,5 @@
-﻿@page "/formulario1"
+﻿@page "/formulario2"
+@page "/formulario1"
 
 <h3>Meu primeiro formulario blazor</h3>
 <EditForm Model="@usuario" onSubmit="Submeter">
@@ -11,13 +12,12 @@
     <label form="nome">Idade</label>
     <InputNumber id="nome" @bind-Value="usuario.Idade"></InputNumber>
     <br />
-    <input type="submit"  value="Enviar Formulario" class="btn-primary"/>
-
+    <input type="submit" value="Enviar Formulario" class="btn-primary" />
 </EditForm>
 @code {
     Usuario usuario = new Usuario();
     private void Submeter()
-        {
+    {
         Console.WriteLine($"Submit : {usuario.Nome} - {usuario.Email} - {usuario.Idade}");
-        }
+    }
 }

@@ -1,0 +1,44 @@
+﻿@page "/formulario1"
+@*
+    RequiredAttribute -- valida se a propriedade foi preenchida
+    MaxLengthAtribute -- valida o tamanho do conteudo de uma propriedade
+    MinLengthAttribute -- valida o tamanho do conteudo de uma propriedade
+    StringLengthAttribute -- valida o tamanho monimo e maximo de uma propriedade
+    RangeAttribute -- valida se uma propriedade numerica esta dentro de uma determinada faixa de valores
+    PhoneAttribute -- valida se o conutedo de uma propriedade é um numero de telefone
+    EmailAdressAttribute --  valida se o conteudo de uma propriedade é uma conta de email
+    CreditCardAttribute -- valida se o conteudo de uma propriedade é um numero de cartao de credito
+    UrlAttribute -- validade se o conteudo de uma propriedade é uma URL
+    RegularExpressionAttribute valida se o conteudo da propriedade combina com uma determinada expressão regular
+
+
+*@
+<h1>Meu primeiro formulário Blazor</h1>
+
+<EditForm Model="@usuario">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label form="nome">Nome</label>
+        <InputText id="nome" @bind-Value="usuario.Nome" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label form="email">Email</label>
+        <InputText id="email" @bind-Value="usuario.Email" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label form="idade">Idade</label>
+        <InputNumber id="idade" @bind-Value="usuario.Idade" class="form-control" />
+    </div>
+    <input type="submit" value="Enviar Formulário" class="btn-primary" />
+</EditForm>
+
+@code {
+    Usuario usuario = new Usuario();
+
+    //private void Submeter()
+    //{
+    //    Console.WriteLine($"Submit : {usuario.Nome} - {usuario.Email} - {usuario.Idade}");
+    //}
+
+}
