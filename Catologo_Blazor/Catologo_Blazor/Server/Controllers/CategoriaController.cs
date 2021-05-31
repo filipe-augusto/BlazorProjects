@@ -45,10 +45,10 @@ namespace Blazor_Catalogo.Server.Controllers
         public async Task<ActionResult<List<Categoria>>> Get([FromQuery]Paginacao paginacao)
         {
             var queryable = context.Categorias.AsQueryable();
+            
             await HttpContext.InserirParametroEmPageResponse(queryable, paginacao.QuantidadePorPagina);
             return await queryable.Paginar(paginacao).ToListAsync();
-        //    return await context.Categorias.AsNoTracking().ToListAsync();
-        
+        //    return await context.Categorias.AsNoTracking().ToListAsync();       
         }
 
         [HttpGet("{id}", Name = "GetCategoria")]
