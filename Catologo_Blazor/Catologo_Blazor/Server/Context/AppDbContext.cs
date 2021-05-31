@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Catologo_Blazor.Shared.Models;
 
 
@@ -16,6 +13,6 @@ namespace Catologo_Blazor.Server.Context
         //add-migration Inicial
         //update-database
         public DbSet<Categoria> Categorias { get; set; }
-        public DbSet<Produto> Produto { get; set; }
+        public DbSet<Produto> Produtos { get; set; }
     }
 }

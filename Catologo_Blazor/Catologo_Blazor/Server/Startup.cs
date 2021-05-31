@@ -27,7 +27,8 @@ namespace Catologo_Blazor.Server
         {
 
             services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer("Data Source=TI-2021\\SQLEXPRESS;Initial Catalog=CatologoBlazorDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));//add
+            // options.UseSqlServer("Data Source=TI-2021\\SQLEXPRESS;Initial Catalog=CatologoBlazorDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));//add
+            options.UseSqlServer("Data Source=FILIPE-HPRPE60;Initial Catalog=CatologoBlazorDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

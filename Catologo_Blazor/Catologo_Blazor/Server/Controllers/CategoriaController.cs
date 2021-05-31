@@ -1,15 +1,16 @@
 ﻿using Catologo_Blazor.Server.Context;
+using Catologo_Blazor.Server.Utils;
 using Catologo_Blazor.Shared.Models;
+using Catologo_Blazor.Shared.Recursos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Catologo_Blazor.Server.Controllers
-{
+
+
 
 //    MEOTODOS HTTPCLIENT
 
@@ -28,8 +29,8 @@ namespace Catologo_Blazor.Server.Controllers
 //PostJsonAsync POST - crirar
 //PutJsonAsync PUT - editar
 //SENDASYNC todos - qualquer um
-
-
+namespace Blazor_Catalogo.Server.Controllers
+{
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriaController : ControllerBase
@@ -39,10 +40,15 @@ namespace Catologo_Blazor.Server.Controllers
         {
             this.context = context;
         }
+
         [HttpGet]
-        public async Task<ActionResult<List<Categoria>>> Get()//retorna uma lista de categoria
+        public async Task<ActionResult<List<Categoria>>> Get([FromQuery]Paginacao paginacao)
         {
-            return await context.Categorias.AsNoTracking().ToListAsync();
+            var queryable = context.Categorias.AsQueryable();
+            await HttpContext.InserirParametroEmPageResponse(queryable, paginacao.QuantidadePorPagina);
+            return await queryable.Paginar(paginacao).ToListAsync();
+        //    return await context.Categorias.AsNoTracking().ToListAsync();
+        
         }
 
         [HttpGet("{id}", Name = "GetCategoria")]
@@ -50,28 +56,30 @@ namespace Catologo_Blazor.Server.Controllers
         {
             return await context.Categorias.FirstOrDefaultAsync(x => x.CategoriaID == id);
         }
+
         [HttpPost]
-        public async Task<ActionResult<Categoria>> Post(Categoria categoria) //incluir
+        public async Task<ActionResult<Categoria>> Post(Categoria categoria)
         {
-            context.Add(categoria);  //add no context que é a sessão com o banco
-            await context.SaveChangesAsync();  //salva
-            return new CreatedAtRouteResult("GetCategoria", //retorna a categoria que foi incluida
-                new { id = categoria.CategoriaID }, categoria);
+            context.Add(categoria);
+            await context.SaveChangesAsync();
+            return new CreatedAtRouteResult("GetCategoria", new { id = categoria.CategoriaID }, categoria);
         }
+
         [HttpPut]
-        public async Task<ActionResult<Categoria>> Put(Categoria categoria) //alterar
+        public async Task<ActionResult<Categoria>> Put(Categoria categoria)
         {
             context.Entry(categoria).State = EntityState.Modified;
             await context.SaveChangesAsync();
             return Ok(categoria);
         }
-        [HttpDelete]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Categoria>> Delete (int id)
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Categoria>> Delete(int id)
         {
             var categoria = new Categoria { CategoriaID = id };
             context.Remove(categoria);
-            return Ok("{id}");
+            await context.SaveChangesAsync();
+            return Ok(categoria);
         }
     }
 }
