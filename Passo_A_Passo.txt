@@ -29,6 +29,57 @@ Microsoft.EntityFrameworkCore.tools
   '''''''' services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));'''''''''''
 
+7.aplicar os atributos nas propriedades do model. precisa incluir um pacote system.componentModel.Annotations no shared
+  [MaxLength(100)]
+8. FAZER O MIGRATION.  add-migration inicial_1 e depos database-update
+9.no projeto server na pasta controoler adicionar os controlers.
+	9.1 selecionar api controller empty e adicione um controoler para o model desejado
+	9.2 depois na classe criada adicione um constutor para fazer a injeção de dependencia da 		classe do banco, context: 
+ 		''''''''  private readonly AppDbContext context;
+       		 public CategoriaController(AppDbContext context)
+        				{     this.context = context;   }
+	9.3 depois de fazer a injeção da dependecia é possivel usar o banco.
+
+	9.4 o primeiro metodo retorna todas as categorias: 
+   	''''''''''''''''[HttpGet]
+        public async Task <ActionResult<List<Categoria>>> Get()
+        {
+            return await context.Categoria.AsNoTracking().ToListAsync();
+            //asnotracking desabilita o rastreamento das entidades e obtem um desempenho melhor
+        }''''''''''''''''''''''''
+
+	9.5 o metodo para retornar apenas uma categoria
+	'''''''''''''' [HttpGet("{id}",Name ="GetCategoria")]
+        public async Task<ActionResult<Categoria>> Get(int id)
+        {return await context.Categoria.FirstOrDefaultAsync(x => x.CategoriaId ==id);}'''''''''
+	
+	9.6 metodo para cirar uma categoria
+	''''''''''    public async Task<ActionResult<Categoria>> Post (Categoria categoria)
+        {
+            context.Add(categoria);
+            await context.SaveChangesAsync();
+            return new CreatedAtRouteResult("GetCategoria",
+                new { id = categoria.CategoriaId }, categoria);
+        }'''''''''''
+	9.7 metodo para alterar categoria
+      '''''''''''[HttpPut]
+        public async Task<ActionResult<Categoria>> Put (Categoria categoria)
+        {
+            context.Entry(categoria).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+            return Ok(categoria);
+        }'''''''
+	9.8 metodo para deletar uma categoria
+       [HttpDelete]
+        '''''''public async Task<ActionResult<Categoria>>Delete (int id)
+        {
+            var categoria = new Categoria { CategoriaId = id };
+            context.Remove(categoria);
+            await context.SaveChangesAsync();
+            return Ok(categoria);
+        }'''''''
+
+
 
 
 
