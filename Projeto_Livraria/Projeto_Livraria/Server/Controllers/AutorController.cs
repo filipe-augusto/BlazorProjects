@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Projeto_Livraria.Server.Context;
+using Projeto_Livraria.Server.Utils;
 using Projeto_Livraria.Shared.Models;
+using Projeto_Livraria.Shared.Recursos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,18 +22,21 @@ namespace Projeto_Livraria.Server.Controllers
             this.context = context;
         }
         [HttpGet]
-        public async Task<ActionResult<List<Autor>>> Get()//retorna todos
+        public async Task<ActionResult<List<Autor>>> Get([FromQuery] Paginacao paginacao)//retorna todos
         {
-            return await context.Autores.AsNoTracking().ToListAsync();
+            var queryable = context.Autores.AsQueryable();
+            await HttpContext.InserirParametroEmPageResponse(queryable, paginacao.QuantidadePorPagina);
+            return await queryable.Paginar(paginacao).ToListAsync();
+//            return await context.Autores.AsNoTracking().ToListAsync();
         }
 
-        [HttpGet("{id}",Name ="GetAutor")]//retorna um
+        [HttpGet("{id}", Name = "GetAutor")]//retorna um
         public async Task<ActionResult<Autor>> Get(int id)
         {
             return await context.Autores.FirstOrDefaultAsync(x => x.AutorId == id);
         }
         [HttpPost]//adicionar
-        public async Task<ActionResult<Autor>> Post (Autor autor)
+        public async Task<ActionResult<Autor>> Post(Autor autor)
         {
             context.Add(autor);
             await context.SaveChangesAsync();
@@ -44,7 +49,7 @@ namespace Projeto_Livraria.Server.Controllers
             await context.SaveChangesAsync();
             return Ok(autor);
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<Autor>> Delete(int id)
         {
             var autor = new Autor { AutorId = id };

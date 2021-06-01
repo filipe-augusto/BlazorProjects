@@ -1,0 +1,109 @@
+﻿@page "/categoria"
+@inject HttpClient http
+@using System.Text.Json 
+<h2>Categorias</h2>
+<br />
+<div>
+    <a class="btn btn-success" href="categoria/create">Criar categoria</a>
+</div>
+<hr />
+<br />
+
+@if (categorias == null)
+{
+    <p><em>Carregando...</em></p>
+}
+else if (categorias.Count == 0)
+{
+    <p><em>Não existe categorias...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Categoria</th>
+                <th>Descrição</th>
+                <th>Edita</th>
+                <th>Deleta</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var categoria in categorias)
+            {
+                <tr>
+                    <td>@categoria.Nome</td>
+                    <td>@categoria.Descricao</td>
+                    <td> <a class="btn btn-primary" href="categoria/edit/@categoria.CategoriaId">Editar</a></td>
+                    <td><a class="btn btn-danger" @onclick="@(() => DeletarCategoria(categoria.CategoriaId))">Deletar</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<Confirma @ref="confirma" onCancela="@CancelaConfirma" onConfirma="@DeletaConfirma">
+    <div>Deseja realmente excluir esse item?</div>
+</Confirma>
+<Paginacao QuantidadeTotalPaginas="QuantidadeTotalPaginas" paginaAtual="paginaAtual" Raio="2" PaginaSelecionada="PaginaSelecionada"></Paginacao>
+
+
+@code {
+
+    Confirma confirma;
+    int codigoCategoria;
+    List<Categoria> categorias { get; set; }
+    private int QuantidadeTotalPaginas;
+    private int paginaAtual = 1;
+
+
+    protected override Task OnInitializedAsync()//metodo usado quando ocomponente é inicializado
+    {
+        return CarregaCategorias();
+    }
+    private async Task PaginaSelecionada(int pagina)
+    {
+        paginaAtual = pagina;
+        await CarregaCategorias();
+    }
+
+
+    async Task CarregaCategorias(int pagina=1, int quantidadePorPagina =5)
+    {
+        var httpResponse = await http.GetAsync($"api/categoria?pagina={pagina}&quantidadePorPagina={quantidadePorPagina}");
+        //  categorias = await http.GetFromJsonAsync<List<Categoria>>("api/categoria"); //recebe as categorias do banco
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            quantidadePorPagina =
+                int.Parse(httpResponse.Headers.GetValues("totalPaginas").FirstOrDefault());
+
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+            categorias = JsonSerializer.Deserialize<List<Categoria>>(responseString,
+                new JsonSerializerOptions()
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+        }
+
+        //categorias =
+    }
+
+
+    void DeletarCategoria(int categoriaid)
+    {//deletar
+
+        confirma.Exibir();
+        codigoCategoria = categoriaid;
+    }
+    async Task DeletaConfirma()
+    {
+        await http.DeleteAsync($"api/categoria/{codigoCategoria}"); //exluir
+        confirma.Ocultar(); //ocultar
+        await CarregaCategorias(); //carregar as categorias
+    }
+    void CancelaConfirma()
+    {
+        confirma.Ocultar();
+    }
+
+}

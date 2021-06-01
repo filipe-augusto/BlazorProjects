@@ -1,3 +1,5 @@
+guia que pode mais de atraplhar do que ajudar. mas se voce nao sabe nada pode ajudar.
+
 1. CRIAR AS CLASSES MODELS E SUAS PROPRIEDADES
 
 2 . NO PROJETO SERVER ADD Microsoft.EntityFrameworkCore.sqlserver e
@@ -70,7 +72,7 @@ Microsoft.EntityFrameworkCore.tools
             return Ok(categoria);
         }'''''''
 	9.8 metodo para deletar uma categoria
-       [HttpDelete]
+       [HttpDelete("{id}")]
         '''''''public async Task<ActionResult<Categoria>>Delete (int id)
         {
             var categoria = new Categoria { CategoriaId = id };
@@ -78,8 +80,237 @@ Microsoft.EntityFrameworkCore.tools
             await context.SaveChangesAsync();
             return Ok(categoria);
         }'''''''
+CRIANDO APLICAÇÃO BLAZOR PARA CATEGORIAS
+10. CRIAR UMA PASTA CATEGORIA DENTRO DA PAGINA PAGES E  CRIAR ARQUIVO INDEX, DENTRO DA PASTA CATEGORIA. E REMOVER ARQUIVOS DESNECESSARIOS.
+11.CRIAR LINK NO NAV MENU PARA CATEGORIA
+12.No index de categoria, criar @page @page "/nome da categoria" e o inject @inject HttpClient http
+13 No duas condições uma, para informar carregando enquanto for null e outra para informar que a lista esta fazio se o tamanho do array for igual a 0 depois criar uma table para carregar as categorias: 
+''''''''''''
+ <table class="table">
+        <thead>
+            <tr>
+                <th>Categoria</th>
+                <th>Descrição</th>
+                <th>Edita</th>
+                <th>Deleta</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var categoria in categorias)
+            {
+                <tr>
+                    <td>@categoria.Nome</td>
+                    <td>@categoria.Descricao</td>
+                    <td> <a class="btn btn-primary">Editar</a></td>
+                    <td><a class="btn btn-danger">Deletar</a></td>
+                </tr>
+            }
+        </tbody>
 
+    </table>
+}
+'''''''''''''''
+14. criar um botao para Criar uma categoria
+15. No @code criar um aarray de categoria
+16 depois criar um metodo para iniciar quando  a pagina for carregada. e quadno a pagina for carregada ela vai preencher o array de categorias chamando o metodo que vai atribuir os dados do banco para o array:
+''''''   protected override Task OnInitializedAsync()//metodo usado quando ocomponente é inicializado
+    {
+        return CarregaCategorias();
+    }
 
+    async Task CarregaCategorias()
+    {
+        categorias = await http.GetFromJsonAsync<Categoria[]>("api/categoria"); //recebe as categorias do banco
+    }'''''''
+CRIAR INCLUIR
+17. Criar @page "categoria/create" e @inject httpclient 
+19. criar editform e como model colocar uma categoria instanciada no @code
+''''''''''
+<EditForm Model="@categoria"></EditForm>
+@code { Categoria categoria = new Categoria();}
+''''''''''''
+20. Criar os campos de input dentro do editform
+''''''
+   <div class="form-group">
+        <label form="nome">Nome</label>
+        <InputText @bind-Value="@categoria.Nome" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label form="descricao">Descrição</label>
+        <InputText @bind-Value="@categoria.Descricao" class="form-control" />
+    </div>
+'''''''''
+21 . criar as validações de erro no editform
+'''''
+<EditForm Model="@categoria">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+'''''''''
+  <InputText @bind-Value="@categoria.Descricao" class="form-control" />
+        <ValidationMessage For="@(()=>categoria.Descricao)" />
+''''''''''
+22 .Depois na classe model, e preciso colocar a validação nas propriedades
+[Required(ErrorMessage ="o nome da categoria é obrigatorio")]
+
+23. criar um button para salvar no componente create
+'''' <button type="submit" class="btn btn-success">Salvar</button>
+    '''''''
+24. Criar o evento de criar categoria.
+ Adicionar o OnValidSubmit no componente EditForm
+depois o metodo:
+'''''''''''
+    async Task CriarCategoria()
+    { await http.PostAsJsonAsync("api/categoria", categoria); }
+''''''''''''''
+25. Adicionar a rota do componente create no button CRIAR categoria.
+26. Injetar o NavigationManager adicionar no metodo CriarCategoria o codigo:navigation.NavigateTo("categoria");. Isso para quando criar uma categoria ele volta para lista de categoria.
+27. criar o button cancelar 
+'''''<button type="submit" class="btn btn-danger" @onclick="(()=> navigation.NavigateTo("categoria"))">Cancelar</button>'''''''''
+****************************************************************
+BOTAO EDITAR
+28. Criar componente de editar na pasta categoria e adicionar a rota e os injects. NESSA ROTA TEM UM PARAMETRO DE ROTA.
+'''''@page "/categoria/edit/{categoriaId}"
+@inject HttpClient hhtp
+@inject NavigationManager navigation ''''''
+29.Criar parametro categoriaId e um metodo para quando a pagina for carregada o parametro receber o valor pela url
+'''''' 
+[Parameter]
+    public int categoriaid { get; set; }
+    Categoria categoria = new Categoria();
+    protected async override Task OnParametersSetAsync()
+    {categoria = await http.GetFromJsonAsync<Categoria>($"api/categoria/{categoriaid}");}
+''''' 
+30. Adicionar o html editform. copiar do 'criar' mudando o model e onvliadsubmit
+'''''''
+<EditForm Model="@categoria" OnValidSubmit="@EditarCategoria">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label form="nome">Nome</label>
+        <InputText @bind-Value="@categoria.Nome" class="form-control" />
+        <ValidationMessage For="@(()=>categoria.Nome)" />
+    </div>
+    <div class="form-group">
+        <label form="descricao">Descrição</label>
+        <InputText @bind-Value="@categoria.Descricao" class="form-control" />
+        <ValidationMessage For="@(()=>categoria.Descricao)" />
+    </div>
+    <button type="submit" class="btn btn-success">Editar</button>
+    <button  class="btn btn-danger" @onclick="@(()=> navigation.NavigateTo("categoria"))">Cancelar</button>
+</EditForm>
+'''''''
+31. Adcionar o metodo para editar
+''''''''
+    async Task EditarCategoria()
+    {
+        await http.PutAsJsonAsync("api/categoria", categoria);
+        navigation.NavigateTo("categoria");
+    }
+''''''''
+32. na pagina index adicionar a rota com parametro de rota no botão editar no componente index.
+ <td> <a class="btn btn-primary" href="categoria/edit/@categoria.CategoriaId">Editar</a></td>
+**********************************************
+--CRAIR UM COMPONENTE PARA REAPROVEITAR O EDITAR E CRIAR
+33. criar um novo componente CategoriaForm, copiar o html do editar e colocar nesse novo componente.
+34. mudar o html para receber os parametros :
+'''''''''[Inject]
+    public NavigationManager navigation { get; set; }
+    [Parameter]
+    public Categoria categoria { get; set; }
+    [Parameter]
+    public string ButtonTextSubmit { get; set; }
+    [Parameter]
+    public string ButtonTextCancelar { get; set; }
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+'''''''''''
+35. Depois trocar o editform pelo novo componente no index e no edit e mudar os atributos.
+<CategoriaForm Categoria="@categoria" OnValidSubmit="@EditarCategoria"
+               ButtonTextCancelar="Cancelar" ButtonTextSubmit="Alterar"></CategoriaForm>
+------------------------------------------
+incluir deletar
+36. No index, nos botões deletar da tabela adicionar a chamada do metodo de deletar
+@onclick="@(() => DeletarCategoria(categoria.CategoriaId))"
+37. criar o metodo de deletar
+   async void DeletarCategoria(int categoriaid) {//deletar
+        await http.DeleteAsync($"api/categoria/{categoriaid}");
+        await CarregaCategorias();
+    }
+38. criar o componente confirma que é um modal para aparecer quando for deletar uma categoria
+39. Adicionar o componente confirma no index.
+<Confirma @ref="confirma" onCancela="@CancelaConfirma" onConfirma="@DeletaConfirma">
+    <div>Deseja realmente excluir esse item?</div>
+</Confirma>
+40. ajustar o metodo paar deletar a categoria.
+''''''''''''''''''''''''''    
+void DeletarCategoria(int categoriaid) {//deletar
+
+        confirma.Exibir();
+        codigoCategoria = categoriaid;
+    }
+    async Task DeletaConfirma()
+    {
+        await http.DeleteAsync($"api/categoria/{codigoCategoria}"); //exluir
+        confirma.Ocultar(); //ocultar
+        await CarregaCategorias(); //carregar as categorias
+    }
+    void CancelaConfirma()
+    {
+        confirma.Ocultar();
+    }
+'''''''''''''''''''''''
+Paginação 
+
+41. criar classe paginacao para setar os valores padroes:
+''''''''''
+namespace Catologo_Blazer.Shared.Recursos
+{
+class Paginacao{
+        public int Pagina { get; set; }
+        public int QuantidadePorPagina { get; set; }}}
+''''''''''
+42. Modificar o metodo que retorna uma list na controle. Colocar um parametro nele.
+''''''''''''''''
+   [HttpGet]
+        public async Task <ActionResult<List<Categoria>>> Get([FromQuery] Paginacao paginacao)
+        {
+            var queryable = context.Categoria.AsQueryable();
+            await HttpContext.InserirParametroEmPageResponse(queryable, paginacao.QuantidadePorPagina);
+            return await queryable.Paginar(paginacao).ToListAsync();
+        }
+'''''''''''''
+43. Criar uma pasta Utils no projeto server, e criar um classe com nome de HttpContextExtensions. Depois colocar o metodo abaixo nessa classe:
+
+''''''
+   public async static Task InserirParametroEmPageResponse<T>(this HttpContext context,
+         IQueryable<T> queryable, int quantidadeTotalRegistrosAExibir)
+        {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
+            double quantidadeRegistrosTotal = await queryable.CountAsync();
+            double totalPaginas = Math.Ceiling(quantidadeRegistrosTotal / quantidadeTotalRegistrosAExibir);
+
+            //salvando as informações no header do response
+            context.Response.Headers.Add("quantidadeRegistrosTotal", quantidadeRegistrosTotal.ToString());
+            context.Response.Headers.Add("totalPaginas", totalPaginas.ToString());
+        }
+'''''................
+
+''''''''''''''''''
+45. Criar na pasta utils uma classe QueryableExtensions para o skip e o take
+  public  static class QueryableExtensions
+    {
+        public static IQueryable<T> Paginar<T>(this IQueryable<T> queryable, Paginacao paginacao)
+        {
+            return queryable
+                .Skip((paginacao.Pagina - 1) * paginacao.QuantidadePorPagina)
+                .Take(paginacao.QuantidadePorPagina);
+        }
+    }
+...............................................
 
 
 

@@ -1,0 +1,21 @@
+﻿@page "/autor/edit/{AutorId:int}"
+@inject HttpClient http
+@inject NavigationManager navigation
+
+<h1>Editar</h1>
+<AutorForm Autor="@autor" OnValidSubmit="EditarAutor"
+                   ButtonTextSubmit="Salvar" ButtonTextCancelar="Cancelar">
+    </AutorForm>
+@code {
+    [Parameter]
+    public int autorId { get; set; }//trazer o dado
+    Autor autor = new Autor();
+    protected async override Task OnParametersSetAsync()
+    { autor = await http.GetFromJsonAsync<Autor>($"api/autor/{autorId}"); }
+
+    async Task EditarAutor()//editar
+    {
+        await http.PutAsJsonAsync("api/autor", autor);
+        navigation.NavigateTo("autor");
+    }
+}

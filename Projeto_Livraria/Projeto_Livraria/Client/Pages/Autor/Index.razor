@@ -1,0 +1,77 @@
+﻿@page "/autor"
+@inject HttpClient http
+
+<h1>  Autores  </h1>
+
+@if (autores == null)
+{
+
+    <p><em>Carregando ...</em></p>
+}
+else if (autores.Length == 0)
+{
+    <p>Não existe categorias...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Nascionalidade</th>
+                <th>Editar</th>
+                <th>Deleta</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var autor in autores)
+            {
+            <tr>
+                <td>@autor.Nome</td>
+                <td>@autor.Nacionalidade</td>
+                <td> <a class="btn btn-primary" href="autor/edit/@autor.AutorId">Editar</a></td>
+                <td><a class="btn btn-danger" @onclick="@(() => DeletarAutor(autor.AutorId))">Deletar</a></td>
+
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+<Confirma @ref="confirma" onCancela="@CancelaConfirma" onConfirma="@DeletaConfirma">
+    <div>Deseja realmente excluir esse item?</div>
+</Confirma>
+<hr/>
+<div>
+    <a class="btn btn-success" href="autor/create">Novo Autor</a>
+ 
+</div>
+@code {
+    Autor[] autores { get; set; }
+    Confirma confirma;
+    int codigoAutor;
+    protected override Task OnInitializedAsync()
+    {
+        return CarregaAutores();
+    }
+    async Task CarregaAutores()
+    {
+        autores = await http.GetFromJsonAsync<Autor[]>("api/autor");
+    }
+    void DeletarAutor(int autorId)
+    {//deletar
+
+        confirma.Exibir();
+        codigoAutor = autorId;
+    }
+    async Task DeletaConfirma()
+    {
+        await http.DeleteAsync($"api/autor/{codigoAutor}"); //exluir
+        confirma.Ocultar(); //ocultar
+        await CarregaAutores(); //carregar as categorias
+    }
+    void CancelaConfirma()
+    {
+        confirma.Ocultar();
+    }
+
+}

@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Catologo_Blazer.Shared.Recursos;
+using Catologo_Blazer.Server.Utils;
 
 namespace Catologo_Blazer.Server.Controllers
 {
@@ -20,10 +22,13 @@ namespace Catologo_Blazer.Server.Controllers
             this.context = context;
         }
         [HttpGet]
-        public async Task <ActionResult<List<Categoria>>> Get()
+        public async Task <ActionResult<List<Categoria>>> Get([FromQuery] Paginacao paginacao)
         {
-            return await context.Categoria.AsNoTracking().ToListAsync();
-            //asnotracking desabilita o rastreamento das entidades e obtem um desempenho melhor
+            var queryable = context.Categoria.AsQueryable();
+         //   var queryable = context.Categorias.AsQueryable();
+            await HttpContext.InserirParametroEmPageResponse(queryable, paginacao.QuantidadePorPagina);
+            return await queryable.Paginar(paginacao).ToListAsync();
+
         }
         [HttpGet("{id}",Name ="GetCategoria")]
         public async Task<ActionResult<Categoria>> Get(int id)
@@ -45,7 +50,7 @@ namespace Catologo_Blazer.Server.Controllers
             await context.SaveChangesAsync();
             return Ok(categoria);
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<Categoria>>Delete (int id)
         {
             var categoria = new Categoria { CategoriaId = id };

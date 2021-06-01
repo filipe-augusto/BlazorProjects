@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projeto_Livraria.Server", "Projeto_Livraria\Server\Projeto_Livraria.Server.csproj", "{9EEDB895-BE80-4CBE-A18E-99BEE5DED8B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Projeto_Livraria.Server", "Projeto_Livraria\Server\Projeto_Livraria.Server.csproj", "{9EEDB895-BE80-4CBE-A18E-99BEE5DED8B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projeto_Livraria.Client", "Projeto_Livraria\Client\Projeto_Livraria.Client.csproj", "{3CBCF596-DF69-4595-A13B-88D06C821E36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Projeto_Livraria.Client", "Projeto_Livraria\Client\Projeto_Livraria.Client.csproj", "{3CBCF596-DF69-4595-A13B-88D06C821E36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Projeto_Livraria.Shared", "Projeto_Livraria\Shared\Projeto_Livraria.Shared.csproj", "{CE53117D-3510-4520-853D-F10A7CE5C15F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Projeto_Livraria.Shared", "Projeto_Livraria\Shared\Projeto_Livraria.Shared.csproj", "{CE53117D-3510-4520-853D-F10A7CE5C15F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
