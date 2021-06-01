@@ -311,6 +311,8 @@ class Paginacao{
         }
     }
 ...............................................
-
+46. criar o componente paginacao na pasta shared
+..........copiar
+47 altera
 
 
