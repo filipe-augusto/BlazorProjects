@@ -1,15 +1,30 @@
 ﻿@page "/autor/edit/{AutorId:int}"
 @inject HttpClient http
 @inject NavigationManager navigation
+@inject IJSRuntime js
 
 <h1>Editar</h1>
 <AutorForm Autor="@autor" OnValidSubmit="EditarAutor"
-                   ButtonTextSubmit="Salvar" ButtonTextCancelar="Cancelar">
-    </AutorForm>
+           ButtonTextSubmit="Salvar" ButtonTextCancelar="Cancelar">
+</AutorForm>
 @code {
     [Parameter]
     public int autorId { get; set; }//trazer o dado
+
     Autor autor = new Autor();
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Focus("txtCategoriaNome");
+        }
+    }
+    public async Task Focus(string elementId)
+    {
+        await js.InvokeVoidAsync("focusById", elementId);
+    }
+
+
     protected async override Task OnParametersSetAsync()
     { autor = await http.GetFromJsonAsync<Autor>($"api/autor/{autorId}"); }
 

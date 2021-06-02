@@ -6,7 +6,7 @@
     <div class="form-group">
         <label form="nome">Nome: </label>
         <div>
-            <InputText @bind-Value="@autor.Nome" class="form-control" />
+            <InputText id="txtCategoriaNome" @bind-Value="@autor.Nome" class="form-control" />
             <ValidationMessage For="@(()=> autor.Nome)" />
         </div>
     </div>
@@ -26,7 +26,6 @@
         @ButtonTextCancelar
     </button>
 </EditForm>
-
 @code{
     [Inject]
     public NavigationManager navigation { get; set; }

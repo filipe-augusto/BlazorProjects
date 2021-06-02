@@ -1,5 +1,20 @@
 ﻿@page "/autor"
 @inject HttpClient http
+@using System.Text.Json
+
+
+<div class="form-inline">
+    <label class="sr-only" for="filter-name">Filtro </label>
+    <input type="text" class="form-control mb-2 mr-sm-2"
+           @bind="nomeFiltro" placeholder="Filtrar pelo nome" />
+    <button type="button" class="btn btn-primary mr-sm-2" @onclick="Filtrar">
+        Filtrar
+    </button>
+
+    <button type="button" class="btn btn-danger mr-sm-2" @onclick="LimparFiltro">
+        Limpar
+    </button>
+</div>
 
 <h1>  Autores  </h1>
 
@@ -8,7 +23,7 @@
 
     <p><em>Carregando ...</em></p>
 }
-else if (autores.Length == 0)
+else if (autores.Count == 0)
 {
     <p>Não existe categorias...</p>
 }
@@ -26,37 +41,76 @@ else
         <tbody>
             @foreach (var autor in autores)
             {
-            <tr>
-                <td>@autor.Nome</td>
-                <td>@autor.Nacionalidade</td>
-                <td> <a class="btn btn-primary" href="autor/edit/@autor.AutorId">Editar</a></td>
-                <td><a class="btn btn-danger" @onclick="@(() => DeletarAutor(autor.AutorId))">Deletar</a></td>
+                <tr>
+                    <td>@autor.Nome</td>
+                    <td>@autor.Nacionalidade</td>
+                    <td> <a class="btn btn-primary" href="autor/edit/@autor.AutorId">Editar</a></td>
+                    <td><a class="btn btn-danger" @onclick="@(() => DeletarAutor(autor.AutorId))">Deletar</a></td>
 
-            </tr>
+                </tr>
             }
         </tbody>
     </table>
 }
+   @*<InputCheckbox @onchange="@apresentaModal" class="switcher-input" id="StatusContrato" />*@
 <Confirma @ref="confirma" onCancela="@CancelaConfirma" onConfirma="@DeletaConfirma">
     <div>Deseja realmente excluir esse item?</div>
 </Confirma>
-<hr/>
+<Paginacao QuantidadeTotalPaginas="QuantidadeTotalPaginas" paginaAtual="paginaAtual" Raio="2" PaginaSelecionada="PaginaSelecionada"></Paginacao>
+
+<hr />
 <div>
     <a class="btn btn-success" href="autor/create">Novo Autor</a>
- 
+
 </div>
 @code {
-    Autor[] autores { get; set; }
+    List<Autor> autores { get; set; }
     Confirma confirma;
     int codigoAutor;
+
+    private int QuantidadeTotalPaginas;
+    private int paginaAtual = 1;
+    private string nomeFiltro = string.Empty;
+    private async Task Filtrar()
+    { paginaAtual = 1; await CarregaAutores(); }
+    private async Task LimparFiltro()
+    {
+        nomeFiltro = string.Empty;
+        paginaAtual = 1;
+        await CarregaAutores(); }
+
+    private async Task PaginaSelecionada(int pagina)
+    {
+        paginaAtual = pagina;
+        await CarregaAutores(pagina);
+    }
+
     protected override Task OnInitializedAsync()
     {
         return CarregaAutores();
     }
-    async Task CarregaAutores()
+    async Task CarregaAutores(int pagina = 1, int quantidadePorPagina = 5)
     {
-        autores = await http.GetFromJsonAsync<Autor[]>("api/autor");
+        var httpResponse =
+          await http.GetAsync($"api/autor?pagina={pagina}&quantidadePorPagina={quantidadePorPagina}&nome={nomeFiltro}");
+        //  await http.GetAsync($"api/categoria?pagina={pagina}&quantidadePorPagina={quantidadePorPagina}&nome={nomeFiltro}");
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            QuantidadeTotalPaginas =
+                 int.Parse(httpResponse.Headers.GetValues("totalPaginas").FirstOrDefault());
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+            autores = JsonSerializer.Deserialize<List<Autor>>(responseString,
+           new JsonSerializerOptions()
+           {
+               PropertyNameCaseInsensitive = true
+           });
+        }
     }
+    void apresentaModal()
+    {
+        confirma.Exibir();
+    }
+
     void DeletarAutor(int autorId)
     {//deletar
 

@@ -22,12 +22,16 @@ namespace Projeto_Livraria.Server.Controllers
             this.context = context;
         }
         [HttpGet]
-        public async Task<ActionResult<List<Autor>>> Get([FromQuery] Paginacao paginacao)//retorna todos
+        public async Task<ActionResult<List<Autor>>> Get([FromQuery] Paginacao paginacao, string nome)//retorna todos
         {
             var queryable = context.Autores.AsQueryable();
+            if (!string.IsNullOrEmpty(nome))
+            {
+                queryable = queryable.Where(x => x.Nome.Contains(nome));
+            }
             await HttpContext.InserirParametroEmPageResponse(queryable, paginacao.QuantidadePorPagina);
             return await queryable.Paginar(paginacao).ToListAsync();
-//            return await context.Autores.AsNoTracking().ToListAsync();
+//          return await context.Autores.AsNoTracking().ToListAsync();
         }
 
         [HttpGet("{id}", Name = "GetAutor")]//retorna um

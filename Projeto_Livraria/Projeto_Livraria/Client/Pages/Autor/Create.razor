@@ -1,29 +1,43 @@
 ﻿@page "/autor/create"
 @inject HttpClient http
 @inject NavigationManager navigation
-  
+@inject IJSRuntime js
 <AutorForm Autor="@autor" OnValidSubmit="CriarAutor"
            ButtonTextSubmit="Salvar" ButtonTextCancelar="Cancelar">
 </AutorForm>
 
 @*<EditForm Model="@autor" OnValidSubmit="@CriarAutor">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <div class="form-group">
-        <label form="nome">Nome </label>
-        <InputText @bind-Value="@autor.Nome" class="form-control" />
-        <ValidationMessage For="@(()=>autor.Nome)" />
-    </div>
-    <div class="form-group">
-        <label form="nacionalidade">Nacionalidade </label>
-        <InputText @bind-Value="@autor.Nacionalidade" class="form-control" />
-        <ValidationMessage For="@(()=>autor.Nacionalidade)" />
-    </div>
-    <button type="submit" class="btn btn-success">Salvar</button>
-    <button type="submit" class="btn btn-danger" @onclick="@(()=>navigation.NavigateTo("autor"))">Cancelar</button>
-</EditForm>*@
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group">
+            <label form="nome">Nome </label>
+            <InputText @bind-Value="@autor.Nome" class="form-control" />
+            <ValidationMessage For="@(()=>autor.Nome)" />
+        </div>
+        <div class="form-group">
+            <label form="nacionalidade">Nacionalidade </label>
+            <InputText @bind-Value="@autor.Nacionalidade" class="form-control" />
+            <ValidationMessage For="@(()=>autor.Nacionalidade)" />
+        </div>
+        <button type="submit" class="btn btn-success">Salvar</button>
+        <button type="submit" class="btn btn-danger" @onclick="@(()=>navigation.NavigateTo("autor"))">Cancelar</button>
+    </EditForm>*@
 @code {
     Autor autor = new Autor();
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Focus("txtCategoriaNome");
+        }
+    }
+    public async Task Focus(string elementId)
+    {
+        await js.InvokeVoidAsync("focusById", elementId);
+    }
+
+
     async Task CriarAutor()
     {
         await http.PostAsJsonAsync("api/autor", autor);

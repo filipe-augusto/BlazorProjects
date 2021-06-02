@@ -313,6 +313,119 @@ class Paginacao{
 ...............................................
 46. criar o componente paginacao na pasta shared
 ..........copiar
-47 altera
+FILTRO
+47. adicionar o html no index. campo inline para filtrar.
+48. adicionar no @code a variavel do nome do filtro e o metodo diltrar
+'''
+    private string nomeFiltro = string.Empty;
+    private async Task Filtrar()
+    { paginaAtual = 1;  await CarregaCategorias(); }
+''''
+49. Mudar a forma da url para acrescentar o metodo.
+    var httpResponse =
+            await http.GetAsync($"api/categoria?pagina={pagina}&quantidadePorPagina={quantidadePorPagina}&nome={nomeFiltro}");
+---------------------
+50. ajustar o controlador. no metodo get list para filtrar o que vier no filtro.
+..........................    
+[HttpGet]
+        public async Task <ActionResult<List<Categoria>>> Get([FromQuery] Paginacao paginacao, [FromQuery] string nome)
+        {
+            var queryable = context.Categoria.AsQueryable();
+            if (!string.IsNullOrEmpty(nome))
+            {
+                queryable = queryable.Where(x => x.Nome.Contains(nome));
+            }
+         //   var queryable = context.Categorias.AsQueryable();
+            await HttpContext.InserirParametroEmPageResponse(queryable, paginacao.QuantidadePorPagina);
+            return await queryable.Paginar(paginacao).ToListAsync();
+        }
+...........................
+51. criar o metodo para limpar o filtro:
+   private async Task LimparFiltro()
+    {
+        nomeFiltro = string.Empty;
+        paginaAtual = 1;
+        await CarregaCategorias();
+    }
+**********************
+colocar foco nos input
+52.
+criar arquivo js
+'''''
+function focusById(elementId) {
+    var element = document.getElementById(elementoId);
+    if (element) {
+        element.focus();
+    }
+}
+''''''''
+53. Colocar o ID no input que irá receber o foco. No caso ele fica componente categoriaForm
+54. criar dois metodos para quando carregar atribuir o foco e fazer um inject do 
+@inject IJSRuntime js
+:
+   protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Focus("txtNomeCategoria");
+        }
+    }
+    public async Task Focus(string elementId)
+    {
+        await js.InvokeVoidAsync("focusById", elementId);
+    }
+*************************************************
+CRIANDO CONTROLADOR DO PRODUTO
+55. Criar o controle para produto. precisa ser empty.
+   //CONEXAO COM BANCO DE DADOS
+        private readonly AppDbContext context;
+        public ProdutoController(AppDbContext context)
+        {
+            this.context = context;
+        }
+        //RETORNAR UMA LISTA DE PRODUTOS
+        [HttpGet]
+        public async Task<ActionResult<List<Produto>>> Get()
+        {
+            return await context.Produtos.AsNoTracking().ToListAsync();
+        }
+
+        //RETORNAR UM PRODUTO IGUAL AO ID PASSADO PELO PARAMETRO
+        [HttpGet("{id}",Name ="GetProduto")]
+        public async Task<ActionResult<Produto>> Get(int id)
+        {
+            return await context.Produtos.FirstOrDefaultAsync(x => x.ProdutoId == id);
+        }
+
+        //CRIAR OU ADICIONAR UM NOVO PRODUTO
+        [HttpPost]
+        public async Task<ActionResult<Produto>> Post(Produto produto)
+        {
+            context.Add(produto);
+            await context.SaveChangesAsync();
+            return new CreatedAtRouteResult("GetProduto", new { id = produto.ProdutoId }, produto);
+        }
+        //EDITAR UM PRODUTO
+        public async Task <ActionResult<Produto>> Put(Produto produto)
+        {
+            context.Entry(produto).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+            return Ok(produto);
+        }
+
+        //EXCLUIR UM PRODUTO
+        [HttpDelete ("{id}")]
+        public async Task<ActionResult<Produto>> Delete (int id)
+        {
+            var produto = new Produto { ProdutoId = id };
+            context.Remove(produto);
+            await context.SaveChangesAsync();
+            return Ok(produto);
+        }
+-----------------------------------------------------------------
+56. Criar o componente index para produto. Basicamente copiar de categorias;
+
+
+
 
 

@@ -22,26 +22,31 @@ namespace Catologo_Blazer.Server.Controllers
             this.context = context;
         }
         [HttpGet]
-        public async Task <ActionResult<List<Categoria>>> Get([FromQuery] Paginacao paginacao)
+        public async Task <ActionResult<List<Categoria>>> Get([FromQuery] Paginacao paginacao, [FromQuery] string nome)
         {
             var queryable = context.Categoria.AsQueryable();
+            if (!string.IsNullOrEmpty(nome))
+            {
+                queryable = queryable.Where(x => x.Nome.Contains(nome));
+            }
          //   var queryable = context.Categorias.AsQueryable();
             await HttpContext.InserirParametroEmPageResponse(queryable, paginacao.QuantidadePorPagina);
             return await queryable.Paginar(paginacao).ToListAsync();
-
         }
-        [HttpGet("{id}",Name ="GetCategoria")]
+
+        [HttpGet("{id}", Name ="GetCategoria")]
         public async Task<ActionResult<Categoria>> Get(int id)
         {
             return await context.Categoria.FirstOrDefaultAsync(x => x.CategoriaId == id);
         }
+
         [HttpPost]
         public async Task<ActionResult<Categoria>> Post (Categoria categoria)
         {
             context.Add(categoria);
             await context.SaveChangesAsync();
             return new CreatedAtRouteResult("GetCategoria",
-                new { id = categoria.CategoriaId }, categoria);
+             new { id = categoria.CategoriaId }, categoria);
         }
         [HttpPut]
         public async Task<ActionResult<Categoria>> Put (Categoria categoria)

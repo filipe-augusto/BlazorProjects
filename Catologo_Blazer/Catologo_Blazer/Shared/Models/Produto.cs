@@ -10,10 +10,13 @@ namespace Catologo_Blazer.Shared.Models
     public class Produto
     {
         public int ProdutoId { get; set; }
+        [Required(ErrorMessage = "O nome do produto é obrigatorio")]
         [MaxLength(100)]
         public string Nome { get; set; }
+        [Required(ErrorMessage = "O nome da descrição é obrigatorio")]
         [MaxLength(260)]
         public string Descricao { get; set; }
+        [Required(ErrorMessage = "O campo  preço é obrigatorio")]
         public float Preco { get; set; }
         public string  Imagem { get; set; }
     }

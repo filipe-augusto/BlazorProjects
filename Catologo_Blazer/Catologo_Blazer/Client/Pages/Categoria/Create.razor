@@ -1,6 +1,7 @@
 ﻿@page "/categoria/create"
 @inject HttpClient http
 @inject NavigationManager navigation
+@inject IJSRuntime js
 
 @*<CategoriaForm Categoria="@categoria" OnValidSubmit="@CriarCategoria"
                ButtonTextCancelar="Cancelar" ButtonTextSubmit="Criar"/>*@
@@ -11,7 +12,7 @@
     <div class="form-group">
         <label form="nome">Nome: </label>
         <div>
-            <InputText @bind-Value="@categoria.Nome" class="form-control" />
+            <InputText id="txtNomeCategoria" @bind-Value="@categoria.Nome" class="form-control" />
             <ValidationMessage For="@(()=> categoria.Nome)" />
         </div>
     </div>
@@ -30,7 +31,22 @@
     </button>
 </EditForm>
 @code {
+
     Categoria categoria = new Categoria();
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Focus("txtNomeCategoria");
+        }
+    }
+    public async Task Focus(string elementId)
+    {
+        await js.InvokeVoidAsync("focusById", elementId);
+    }
+
+
     async  Task CriarCategoria()
     {
         await http.PostAsJsonAsync("api/categoria", categoria);
