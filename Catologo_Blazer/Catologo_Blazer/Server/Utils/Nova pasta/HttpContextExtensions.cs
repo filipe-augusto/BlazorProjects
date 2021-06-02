@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazor_Catalogo.Server.Utils
+namespace Catologo_Blazer.Server.Utils
 {
     public static class HttpContextExtensions
     {
@@ -25,3 +25,4 @@ namespace Blazor_Catalogo.Server.Utils
         }
     }
 }
+

@@ -1,4 +1,7 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
 namespace Catologo_Blazer.Shared.Recursos
 {
     public class Paginacao

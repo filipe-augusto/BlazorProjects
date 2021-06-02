@@ -1,10 +1,9 @@
 ﻿using Catologo_Blazer.Shared.Recursos;
-
 using System.Linq;
 
-namespace Blazor_Catalogo.Server.Utils
+namespace Catologo_Blazer.Server.Utils
 {
-    public static class QueryableExtensions
+    public  static class QueryableExtensions
     {
         public static IQueryable<T> Paginar<T>(this IQueryable<T> queryable, Paginacao paginacao)
         {
