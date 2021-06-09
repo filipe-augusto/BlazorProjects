@@ -1,4 +1,4 @@
-﻿using Catologo_Blazer.Shared.Models;
+﻿
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,8 +9,7 @@ using System.Threading.Tasks;
 namespace Catologo_Blazer.Shared
 {
    public  class Categoria
-    {
-        
+    { 
         public int CategoriaId { get; set; }
         [Required(ErrorMessage ="o nome da categoria é obrigatorio")]
         [MaxLength(100)]
@@ -19,6 +18,5 @@ namespace Catologo_Blazer.Shared
         [MaxLength(260)]
         public string Descricao { get; set; }
         public ICollection<Produto> Produtos { get; set; }
-
     }
 }

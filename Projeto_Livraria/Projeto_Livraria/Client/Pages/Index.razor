@@ -1,7 +1,87 @@
 ﻿@page "/"
+@inject HttpClient http
 
-<h1>Hello, world!</h1>
+@*<h1>Hello, world!</h1>
+<input type="checkbox" class="form-check-input" id="Status" @onchange="CheckChand" />*@
 
-Welcome to your new app.
+<EditForm Model="this">
+    <InputCheckbox  @bind-Value="CheckBoxData"  @onclick="CheckChand" class="form-check-input" id="Status" />
+</EditForm>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<Confirma @ref="confirma" onCancela="@Cancelar" onConfirma="@Confirmar" Titulo="Alterar Data">
+    <EditForm Model="this">
+        <h4>Checkbox</h4>
+        <InputCheckbox @bind-Value="@CheckBoxData" class="custom-switch"></InputCheckbox>
+        @if (@CheckBoxData)
+        {
+            <br />
+            <InputDate @bind-Value="@PegandoData" />
+        }
+    </EditForm>
+
+    @if (CheckBoxData)
+    {
+
+
+        <h1>Achou!!</h1>
+    }
+    else
+    {
+        <h1>Escondeu!!</h1>
+    }
+
+</Confirma>
+<hr />
+<br />
+
+<h1>@palavra</h1>
+
+@code{
+
+
+    public bool CheckBoxData { get; set; } = true;
+
+    public bool CheckBoxModal { get; set; } = true;
+
+    public DateTime PegandoData { get; set; } = DateTime.Now;
+
+
+    bool checkdata = true;
+    bool ischekced { get; set; }
+    Confirma confirma;
+    string palavra = "Filipe augsto";
+
+    bool isVerdade = false;
+
+    void Teste()
+    {
+        Console.WriteLine("lineeee");
+    }
+
+    private void CheckChand()
+    {
+        if (!isVerdade)
+        {
+            palavra = "checkbox true!!!";
+            confirma.Exibir();
+            isVerdade = true;
+        }
+        else
+        {
+            isVerdade = false;
+            confirma.Exibir();
+            palavra = "checkbox false!!!";
+        }
+    }
+    void Confirmar()
+    {
+        palavra = "clicou em confirmar";
+        confirma.Ocultar();
+    }
+    void Cancelar()
+    {
+        palavra = "clicou em cancelar";
+        confirma.Ocultar();
+    }
+
+}

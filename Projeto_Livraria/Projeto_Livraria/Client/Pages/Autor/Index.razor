@@ -52,7 +52,8 @@ else
         </tbody>
     </table>
 }
-   @*<InputCheckbox @onchange="@apresentaModal" class="switcher-input" id="StatusContrato" />*@
+
+
 <Confirma @ref="confirma" onCancela="@CancelaConfirma" onConfirma="@DeletaConfirma">
     <div>Deseja realmente excluir esse item?</div>
 </Confirma>
@@ -64,6 +65,11 @@ else
 
 </div>
 @code {
+    <!-- teste-->
+    public bool isVerdade = true;
+
+    //fim teste
+
     List<Autor> autores { get; set; }
     Confirma confirma;
     int codigoAutor;
@@ -106,10 +112,10 @@ else
            });
         }
     }
-    void apresentaModal()
-    {
-        confirma.Exibir();
-    }
+    //void apresentaModal()
+    //{
+    //    confirma.Exibir();
+    //}
 
     void DeletarAutor(int autorId)
     {//deletar

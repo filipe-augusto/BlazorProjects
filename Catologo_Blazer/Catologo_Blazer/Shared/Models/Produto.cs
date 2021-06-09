@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Catologo_Blazer.Shared.Models
+namespace Catologo_Blazer.Shared
 {
     public class Produto
     {

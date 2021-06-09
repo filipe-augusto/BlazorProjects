@@ -1,6 +1,5 @@
 ﻿using Catologo_Blazer.Server.Context;
-using Catologo_Blazer.Shared.Models;
-using Microsoft.AspNetCore.Http;
+using Catologo_Blazer.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
