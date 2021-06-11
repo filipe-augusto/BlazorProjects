@@ -424,8 +424,22 @@ CRIANDO CONTROLADOR DO PRODUTO
         }
 -----------------------------------------------------------------
 56. Criar o componente index para produto. Basicamente copiar de categorias;
+---------------------------------------
+57. SELECT PARA SELECT EXEMPLO:
+        <select @onchange="CategoriaSelectionChanged" class="form-control">
+            @if (categorias != null)
+            {
+                @foreach (var categoria in categorias)
+                {
+                    <option value="@categoria.CategoriaId"
+                            selected="@(categoria.CategoriaId == Produto.CategoriaId ? true : false)">
+                        @categoria.Nome
+                    </option>
+                }
+            }
+        </select>
 
-
+58. 
 
 
 

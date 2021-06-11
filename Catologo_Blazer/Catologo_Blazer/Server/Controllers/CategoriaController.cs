@@ -1,14 +1,13 @@
 ﻿using Catologo_Blazer.Server.Context;
+using Catologo_Blazer.Server.Utils;
 using Catologo_Blazer.Shared;
+using Catologo_Blazer.Shared.Recursos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Catologo_Blazer.Shared.Recursos;
-using Catologo_Blazer.Server.Utils;
 
 namespace Catologo_Blazer.Server.Controllers
 {
@@ -21,7 +20,12 @@ namespace Catologo_Blazer.Server.Controllers
         {
             this.context = context;
         }
-        [HttpGet]
+        [HttpGet("todas")]
+        public async Task<ActionResult<List<Categoria>>> Get()
+        {
+            return await context.Categoria.AsNoTracking().ToListAsync();
+        }
+            [HttpGet]
         public async Task <ActionResult<List<Categoria>>> Get([FromQuery] Paginacao paginacao, [FromQuery] string nome)
         {
             var queryable = context.Categoria.AsQueryable();

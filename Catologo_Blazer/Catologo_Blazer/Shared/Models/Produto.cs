@@ -19,5 +19,11 @@ namespace Catologo_Blazer.Shared
         [Required(ErrorMessage = "O campo  preço é obrigatorio")]
         public float Preco { get; set; }
         public string  Imagem { get; set; }
+
+        //indica o relacionamento 
+        public int CategoriaId { get; set; }
+        //prop de nevação
+        public virtual Categoria Categoria { get; set; }
+
     }
 }
