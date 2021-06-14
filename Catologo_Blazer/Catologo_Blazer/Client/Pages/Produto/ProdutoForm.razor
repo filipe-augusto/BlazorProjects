@@ -39,18 +39,23 @@
         </select>
     </div>
     <div class="form-group">
-        <label form="imagem">Imagem: </label>
-        <div>
-<InputImagem></InputImagem>
-
+            <InputImagem Label="Imagem" ImagemSelecionada="ImagemSelecionada"
+                         ImagemRemota="@ImagemRemota">
+            </InputImagem>
         </div>
-    </div>
+    @*<div class="form-group">
+        <label form="preco">Imagem:</label>
+        <div>
+            <InputNumber @bind-Value="Produto.Imagem" class="form-control" />
+            <ValidationMessage For="@(()=>Produto.Imagem)" />
+        </div>
+    </div>*@
     <br />
     <button type="submit" class="btn btn-success">
         @ButtonTextSubmit
     </button>
-    <button  class="btn btn-danger" @onclick="@(()=>navigation.NavigateTo("Produto"))">
-       
+    <button class="btn btn-danger" @onclick="@(()=>navigation.NavigateTo("Produto"))">
+
         @ButtonTextCancelar
     </button>
 </EditForm>
@@ -70,6 +75,16 @@
     public string ButtonTextCancelar { get; set; } = "Cancelar";
     [Parameter]
     public EventCallback OnValidSubmit { get; set; }
+    [Parameter]
+    public string ImagemRemota { get; set; }
+
+
+    private void ImagemSelecionada(string imagemBase64)
+    {
+        Produto.Imagem = imagemBase64;
+        ImagemRemota = null;
+        Produto.CategoriaId = categorias[0].CategoriaId;
+    }
 
     protected async override Task OnInitializedAsync()
     {
