@@ -439,7 +439,8 @@ CRIANDO CONTROLADOR DO PRODUTO
             }
         </select>
 
-58. 
+58. CRIAR UM COMPONENTE PARA IMAGENS
+w8leeslabs.blazor.localFiles
 
 
 
