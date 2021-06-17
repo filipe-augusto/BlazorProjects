@@ -18,7 +18,13 @@ namespace Catologo_Blazer.Server.Controllers
         {
             this.context = context;
         }
-        //RETORNAR UMA LISTA DE PRODUTOS
+        [HttpGet("categorias/{id:int}")]
+        public async Task<ActionResult<List<Produto>>> GetProdutoCategoria(int id)
+        {
+            return await context.Produtos.Where(p => p.CategoriaId == id).ToListAsync();
+        }
+
+            //RETORNAR UMA LISTA DE PRODUTOS
         [HttpGet]
         public async Task<ActionResult<List<Produto>>> Get()
         {
@@ -29,7 +35,8 @@ namespace Catologo_Blazer.Server.Controllers
         [HttpGet("{id}",Name ="GetProduto")]
         public async Task<ActionResult<Produto>> Get(int id)
         {
-            return await context.Produtos.FirstOrDefaultAsync(x => x.ProdutoId == id);
+            var registro = await context.Produtos.FirstOrDefaultAsync(x => x.ProdutoId == id);
+            return registro;
         }
 
         //CRIAR OU ADICIONAR UM NOVO PRODUTO
@@ -47,6 +54,17 @@ namespace Catologo_Blazer.Server.Controllers
             await context.SaveChangesAsync();
             return Ok(produto);
         }
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Produto>> Delete(int id)
+        {
+            var produto = new Produto { ProdutoId = id };
+            context.Remove(produto);
+            await context.SaveChangesAsync();
+            return Ok(produto);
+
+        }
+
+
 
     }
 }
