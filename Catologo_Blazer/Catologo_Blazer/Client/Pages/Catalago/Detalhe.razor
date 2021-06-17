@@ -1,0 +1,32 @@
+﻿@page "/produto/detalhe/{produtoid:int}"
+@inject HttpClient http
+
+<div class="col-sm-12 col-lg-12 col-md-12">
+    <div class="card " style="border: none">
+        <img src="https://tokstok.vteximg.com.br/arquivos/ids/1777930-670-670/Cadeira-Amendoa-Brisa.jpg?v=637006142412630000" 
+             class="img-rounded" alt="@produto.Nome" width="300"
+             height="300" />
+        <div class="card-body">
+            <h4 class="pull-right">@produto.Preco</h4>
+            <h4 class="card-title">@produto.Nome</h4>
+            <p class="pull-text">@produto.Descricao</p>
+            <a class="produto/detalhe/@produto.ProdutoId">Detalhes</a>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a href="/catalago/@produto.CategoriaId" class="btn btn-link">Retornar</a>
+</div>
+
+
+@code {
+    Produto produto = new Produto();
+    [Parameter]
+    public int produtoid { get; set; }
+    protected async override Task OnParametersSetAsync()
+    {
+        produto = await http.GetFromJsonAsync<Produto>($"api/produto/{produtoid}");
+    }
+
+}

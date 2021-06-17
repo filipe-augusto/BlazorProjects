@@ -1,5 +1,7 @@
 ﻿using Catologo_Blazer.Server.Context;
+using Catologo_Blazer.Server.Utils;
 using Catologo_Blazer.Shared;
+using Catologo_Blazer.Shared.Recursos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -24,8 +26,20 @@ namespace Catologo_Blazer.Server.Controllers
             return await context.Produtos.Where(p => p.CategoriaId == id).ToListAsync();
         }
 
-            //RETORNAR UMA LISTA DE PRODUTOS
-        [HttpGet]
+        public async Task<ActionResult<List<Produto>>> Get([FromQuery] Paginacao paginacao, [FromQuery] string nome)
+        {
+            var queryable = context.Produtos.AsQueryable();
+            if (!string.IsNullOrEmpty(nome))
+            {
+                queryable = queryable.Where(x => x.Nome.Contains(nome));
+            }
+            //   var queryable = context.Categorias.AsQueryable();
+            await HttpContext.InserirParametroEmPageResponse(queryable, paginacao.QuantidadePorPagina);
+            return await queryable.Paginar(paginacao).ToListAsync();
+        }
+
+        //RETORNAR UMA LISTA DE PRODUTOS
+        [HttpGet("todos")]
         public async Task<ActionResult<List<Produto>>> Get()
         {
             return await context.Produtos.AsNoTracking().ToListAsync();
