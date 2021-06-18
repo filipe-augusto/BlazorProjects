@@ -2,7 +2,7 @@
 
 namespace Blazor_Catalogo.Server.Migrations
 {
-    public partial class newbanck : Migration
+    public partial class job : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Blazor_Catalogo.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210618143042_identitySchema")]
+    [Migration("20191207145947_identitySchema")]
     partial class identitySchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

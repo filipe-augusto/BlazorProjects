@@ -6,26 +6,33 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Blazor_Catalogo.Server.Controllers
 {
-    public class AccountController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AccountController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
-        
-        public AccountController( UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager, 
-            IConfiguration configuration)
+        public AccountController(
+          UserManager<IdentityUser> userManager,
+          SignInManager<IdentityUser> signInManager,
+          IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+        }
+
+        [HttpGet]
+        public string Get()
+        {
+            return $"AccountController :: {DateTime.Now.ToShortDateString()} ";
         }
 
         [HttpPost("Register")]
@@ -34,8 +41,9 @@ namespace Blazor_Catalogo.Server.Controllers
             var user = new IdentityUser
             {
                 UserName = model.Email,
-                Email = model.Password
+                Email = model.Email
             };
+
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
@@ -44,44 +52,48 @@ namespace Blazor_Catalogo.Server.Controllers
             }
             else
             {
-                return BadRequest(new { message = "senha ou nome do usuario invalidos...." });
+                return BadRequest(new { message = "Senha ou nome do usuário inválidos..." });
             }
         }
 
         [HttpPost("Login")]
-        public async Task<ActionResult<UserToken>> Login ([FromBody] UserInfo userInfo)
+        public async Task<ActionResult<UserToken>> Login([FromBody] UserInfo userInfo)
         {
-            var result = await _signInManager.PasswordSignInAsync(userInfo.Email, userInfo.Password,
-                isPersistent: false, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(userInfo.Email,
+               userInfo.Password, isPersistent: false, lockoutOnFailure: false);
+
             if (result.Succeeded)
             {
                 return GenerateToken(userInfo);
             }
             else
             {
-                return BadRequest(new { message = "login inválido." });
+                return BadRequest(new { message = "Login Inválido" });
             }
         }
+
         private UserToken GenerateToken(UserInfo userInfo)
         {
             var claims = new List<Claim>()
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Email),
                 new Claim(ClaimTypes.Name, userInfo.Email),
-                new Claim("mac","macoratti.net"),
+                new Claim("mac", "macoratti.net"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var creds =
+               new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
             var expiration = DateTime.UtcNow.AddHours(2);
-            var message = "Token JWT craido com sucesso";
+            var message = "Token JWT criado com sucesso";
 
             JwtSecurityToken token = new JwtSecurityToken(
-               issuer: null,
-                audience: null,
-                claims: claims,
-                expires: expiration,
-                signingCredentials: creds);
+            issuer: null,
+            audience: null,
+            claims: claims,
+            expires: expiration,
+            signingCredentials: creds);
 
             return new UserToken()
             {
@@ -90,11 +102,5 @@ namespace Blazor_Catalogo.Server.Controllers
                 Message = message
             };
         }
-
-
-
-       
-
-
     }
 }
