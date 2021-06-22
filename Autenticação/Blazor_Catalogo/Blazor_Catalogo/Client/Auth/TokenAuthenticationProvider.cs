@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Blazor_Catalogo.Client.Auth
 {
-    public class TokenAuthenticationProvider : AuthenticationStateProvider
+    public class TokenAuthenticationProvider : AuthenticationStateProvider, IAuthorizeService
     {
         private readonly IJSRuntime js;
         private readonly HttpClient http;

@@ -13,12 +13,12 @@ namespace Blazor_Catalogo.Client
 
             services.AddScoped<TokenAuthenticationProvider>();
 
-            services.AddScoped<IAuthorizeService, TokenAuthenticationProvider>
-                (provider => provider.GetRequiredService<TokenAuthenticationProvider>());
-
-            services.AddScoped<AuthenticationStateProvider, TokenAuthenticationProvider>(
+            services.AddScoped<IAuthorizeService, TokenAuthenticationProvider>(
                 provider => provider.GetRequiredService<TokenAuthenticationProvider>()
                 );
+
+            services.AddScoped<AuthenticationStateProvider, TokenAuthenticationProvider>(
+              provider => provider.GetRequiredService<TokenAuthenticationProvider>());
         }
 
         public void Configure(IComponentsApplicationBuilder app)
