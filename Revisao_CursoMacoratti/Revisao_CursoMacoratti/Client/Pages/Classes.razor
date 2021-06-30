@@ -1,0 +1,67 @@
+﻿@page "/classes"
+@using Revisao_CursoMacoratti.Client.Classes
+
+<h1>calculando</h1>
+<h3>20 + 10 = @Calculo.Somar(20, 10)</h3>
+<h3>20 - 10 = @Calculo.Substrair(20, 10)</h3>
+<h3>20 x 10 = @Calculo.Multiplicar(20, 10)</h3>
+
+<h1> PIZZA: </h1>
+<div>
+    <h4>Pizza : @Pizza.Nome</h4>
+    <h4>Data : @Pizza.DataCadastro </h4>
+</div>
+<h1>PIZZAS: </h1>
+@foreach (var item in produtos)
+{
+    <div>
+
+        @if (item.Nome.Contains("Calabreza"))
+        {
+            <h3>Pizza de calabresa tem desconto</h3>
+        }
+        <h4>Pizza : @item.Nome</h4>
+        <h4>Data : @item.DataCadastro </h4>
+    </div>
+}
+
+
+
+@code{
+    Calculo calculo = new Calculo();
+    public Produto Pizza { get { return GetProduto(); } }
+    public List<Produto> produtos { get { return GetProdutos(); } }
+
+    private Produto GetProduto()
+    {
+        return new Produto()
+        {
+            Nome = "Pizza Mussarela",
+            DataCadastro = new DateTime(2021, 4, 7)
+        };
+    }
+
+    private List<Produto> GetProdutos()
+    {
+        return new List<Produto>()
+        {
+                new Produto()
+                {
+                    Nome = "Pizza Mussarela",
+                    DataCadastro = new DateTime(2021,5,5)
+                },
+                new Produto()
+                {
+                    Nome = "Pizza Calabresa",
+                    DataCadastro = new DateTime(2021,5,5)
+                },
+                new Produto()
+                {
+                    Nome = "Pizza Portuguesa",
+                    DataCadastro = new DateTime(2021,5,5)
+                }
+            };
+    }
+
+}
+

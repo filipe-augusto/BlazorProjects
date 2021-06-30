@@ -12,6 +12,7 @@
                 <DataAnnotationsValidator/>
                 <div class="form-group">
                     <label>Email</label>
+                    <InputText class="form-control" @bind-Value="userinfo.Email"></InputText>
                 </div>
             </EditForm>
         </div>
@@ -19,5 +20,7 @@
 </div>
 
 @code {
+
+    private UserInfo userinfo = new UserInfo();
 
 }

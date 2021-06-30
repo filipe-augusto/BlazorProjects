@@ -1,0 +1,21 @@
+﻿@page "/apresentacao" 
+
+
+<h1>olá @nome</h1>
+<h1>data e hora: @DateTime.Now</h1>
+<h1>dia da semana : @data.ToUpper()</h1>
+<hr/>
+<h1> 2 + 2 = @(2+2)</h1>
+<hr/>
+<button @onclick="@(()=> Console.WriteLine("Fui clicado."))"> Clique aqui</button>
+
+
+@code{
+    string nome = "Filipe";
+    private string data = DateTime.Now.DayOfWeek.ToString();
+    private string Saudacao(string nome)
+    {
+        return $" Bem vindo {nome.ToUpper()}";
+    }
+
+}

@@ -1,0 +1,23 @@
+﻿@page "/databinding" 
+
+<h5>@Mensagem </h5>
+<input @bind="@Mensagem" />
+<br />
+<button @onclick="@AlterarEstado"> Alterar Estado</button>
+<br />
+Input disabled : <input disabled="@Estado" />
+<br/>
+Input readonly : <input readonly="@Estado" />
+<br/>
+CheckBox checked : <input type="checkbox" checked="@Estado" />
+
+@code {
+    private string Mensagem { get; set; } = "Olá Filipe";
+
+    public bool Estado { get; set; }
+    private void AlterarEstado()
+    {
+        Estado = !Estado;
+    }
+
+}
