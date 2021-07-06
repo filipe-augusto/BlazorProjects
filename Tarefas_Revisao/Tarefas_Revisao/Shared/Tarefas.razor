@@ -6,20 +6,22 @@
 @if (tarefas == null)
 {
 
-    <Alerta Mensagem="Carregando">
-        <span style="color:blue"> Carregando tarefas...</span>
+    <Alerta >
+       <Conteudo1> <img src="http://gph.is/2c6Fw45"/>
+        <h1>Aguarde</h1></Conteudo1>
+        <Conteudo2><h1>Carregando</h1></Conteudo2>
     </Alerta>
 }
 else if (!tarefas.Any())
 {
 
-    <Alerta Mensagem="Não exitem tarefas">
-        <div class="card">
-            <div class="card-body">
-                Voce precisa cadastrar algumas tarefas
-            </div>
-        </div>
-    </Alerta>
+<Alerta>
+    
+    <Conteudo1><img src="https://media.giphy.com/media/gfO3FcnL8ZK9wVgr6t/giphy.gif" />
+    <h1>Ainda não existe registros</h1>
+    </Conteudo1>
+    <Conteudo2> Inclua algumas tarefas</Conteudo2>
+</Alerta>
 
 }
 else
