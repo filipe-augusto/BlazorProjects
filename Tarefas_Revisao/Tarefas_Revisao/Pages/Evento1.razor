@@ -1,17 +1,58 @@
 ﻿@page "/evento1"
+@inject IJSRuntime JSRuntime
 <label>Dados de eventos : pressione a tecla A  para mudar a cor</label>
 <div style="background-color: @cor; padding:50px;"></div>
-<input type="text" @onkeypress="@(e=> teclaPressionada(e))"/>
+<input type="text" @onkeypress="@(e=> teclaPressionada(e))" />
+
+Enter text:
+<input @bind="content" />
+<button class="btn btn-primary" @onclick="OnClickButton">Click</button>
+
+<p>
+    <button @onclick="ConvertArray">Convert Array</button>
+</p>
+
 
 @code {
     private string cor = "red";
     void teclaPressionada(KeyboardEventArgs args)
     {
-        if (args.Key == "A" || args.Key=="a")
+        if (args.Key == "A" || args.Key == "a")
         {
             cor = "blue";
             Console.WriteLine("A tecla A/a fio pressionada");
         }
     }
+
+    private uint[] quoteArray =
+       new uint[]
+       {
+            60, 101, 109, 62, 67, 97, 110, 39, 116, 32, 115, 116, 111, 112, 32,
+            116, 104, 101, 32, 115, 105, 103, 110, 97, 108, 44, 32, 77, 97,
+            108, 46, 60, 47, 101, 109, 62, 32, 45, 32, 77, 114, 46, 32, 85, 110,
+            105, 118, 101, 114, 115, 101, 10, 10,
+       };
+
+    private string content { get; set; }
+
+    private async void OnClickButton()
+    {
+        //var jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./script/isolationScript.js");
+        //await jsModule.InvokeVoidAsync("jsIsolation", content);PrintMessage()
+        PrintMessage();
+    }
+
+    private async void PrintMessage()
+    {
+        Console.WriteLine(await JSRuntime.InvokeAsync<string>("methods.print", "here is the message"));
+    }
+    private MarkupString text;
+
+    private async Task ConvertArray()
+    {
+      //  text = new(await JSRuntime.InvokeAsync<string>("convertArray", quoteArray));
+    }
+
+
 
 }

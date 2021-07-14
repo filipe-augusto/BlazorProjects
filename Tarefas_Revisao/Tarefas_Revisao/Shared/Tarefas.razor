@@ -1,5 +1,5 @@
 ﻿
-
+@inject IJSRuntime js
 
 <h1>@Titulo</h1>
 <hr />
@@ -74,7 +74,7 @@ else if (!tarefas.Any())
 
 
     private string novaTarefa = "";
-  
+
 
     void AdicionarNovaTarefa()
     {
@@ -90,8 +90,17 @@ else if (!tarefas.Any())
         }
 
     }
-    void RemoveTarefa(Tarefa tarefa)
+    async Task RemoveTarefa(Tarefa tarefa)
     {
-        tarefas.Remove(tarefas.First(x => x.ID == tarefa.ID));
+        // tarefas.Remove(tarefas.First(x => x.ID == tarefa.ID));
+        var resultado =  await js.InvokeAsync<bool>("confirm", "excluir tarefa?");
+
+        if (resultado)
+        {
+            tarefas.Remove(tarefas.First(x => x.ID == tarefa.ID));
+            // await js.InvokeVoidAsync("alert", "Tarefa excluida com sucesso..");
+            await js.InvokeVoidAsync("MostraAlerta");
+            
+        }
     }
 }

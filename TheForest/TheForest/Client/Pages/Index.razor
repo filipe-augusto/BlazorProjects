@@ -1,0 +1,64 @@
+﻿@page "/"
+@inject IJSRuntime jsRuntime
+
+<h1>Call JS Example 2</h1>
+
+<p>
+    <button @onclick="SetStock">Set Stock</button>
+</p>
+
+@if (stockSymbol != null)
+{
+    <p>@stockSymbol price: @price.ToString("c")</p>
+}
+<div class="col-md-6 datta-example">
+    <div class="card">
+        <div class="card-header">
+            <h5>Pie Charts</h5>
+        </div>
+        <div class="card-body">
+            <div id="pie-chart-1"></div>
+        </div>
+    </div>
+
+</div>
+<!--Pie [ Basic ] Chart<-->
+<div class="col-md-6 datta-example">
+    <div class="card">
+        <div class="card-header">
+            <h5>Pie [ Basic ] Chart</h5>
+        </div>
+        <div class="card-body">
+            <div id="chart-highchart-pie1" style="width: 100%; height: 350px;"></div>
+        </div>
+    </div>
+</div>
+
+
+@code{
+    private Random r = new Random();
+    private string stockSymbol;
+    private decimal price;
+
+    private async Task SetStock()
+    {
+        stockSymbol =
+            $"{(char)('A' + r.Next(0, 26))}{(char)('A' + r.Next(0, 26))}";
+        price = r.Next(1, 101);
+        await jsRuntime.InvokeVoidAsync("displayTickerAlert1", stockSymbol, price);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        string jsonT = " [{name: 'Chrome',  y: 61.41,  sliced: true,   selected: true  }," +
+            " {  name: 'Internet Explorer',  y: 11.84  }, " +
+            "{  name: 'Firefox',  y: 10.85 }, " +
+            "{  name: 'Edge',  y: 4.67 }, " +
+            "{  name: 'Safari', y: 4.18 }," +
+            " {name: 'Other',  y: 7.05  }]";
+
+        await jsRuntime.InvokeVoidAsync("displayCarregaGrafico2", jsonT);
+        await jsRuntime.InvokeVoidAsync("displayCarregaGrafico", "Teste");
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}
