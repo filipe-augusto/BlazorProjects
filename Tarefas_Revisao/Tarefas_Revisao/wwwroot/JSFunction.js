@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 ﻿window.MostraAlerta = function()  {
     alert("asdasd");
 }
@@ -10,4 +11,8 @@ window.methods = {
     print: function (message) {
         return "from js " + message
     }
+=======
+﻿window.MostraAlerta = (message) => {
+    alert(message);
+>>>>>>> Stashed changes
 }
