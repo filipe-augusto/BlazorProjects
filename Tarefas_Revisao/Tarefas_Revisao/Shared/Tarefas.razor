@@ -1,5 +1,10 @@
+<<<<<<< Updated upstream
 ﻿
 @inject IJSRuntime js
+=======
+﻿@inject IJSRuntime js
+
+>>>>>>> Stashed changes
 
 <h1>@Titulo</h1>
 <hr />
@@ -90,6 +95,7 @@ else if (!tarefas.Any())
         }
 
     }
+<<<<<<< Updated upstream
     async Task RemoveTarefa(Tarefa tarefa)
     {
         // tarefas.Remove(tarefas.First(x => x.ID == tarefa.ID));
@@ -102,5 +108,19 @@ else if (!tarefas.Any())
             await js.InvokeVoidAsync("MostraAlerta");
             
         }
+=======
+    private async Task RemoveTarefa(Tarefa tarefa)
+    {
+        //tarefas.Remove(tarefas.First(x => x.ID == tarefa.ID));
+        var resultado = await
+        js.InvokeAsync<bool>("confirm", "excluir tarefa?");
+        if (resultado)
+        {
+            tarefas.Remove(tarefa);
+            await js.InvokeAsync<object>("MostraAlerta", "Ok, tareda excluida");
+
+        }
+
+>>>>>>> Stashed changes
     }
 }
