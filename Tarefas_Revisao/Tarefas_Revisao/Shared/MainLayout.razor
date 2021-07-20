@@ -10,6 +10,36 @@
     </div>
 
     <div class="content px-4">
-        @Body
+        @*<CascadingValue Value="@Cor" Name="CorDeFundo">
+            <CascadingValue Value="@Tamanho" Name="TamanhoDaFonte">*@
+        <CascadingValue Value="config">
+                @Body
+            </CascadingValue>
+            @*</CascadingValue>
+        </CascadingValue>*@
     </div>
 </div>
+
+<div style="width:150px">
+    <select @bind="@config.CorDeFundo" class="form-control" style="margin-top:15px">
+        <option value="green">Verde</option>
+        <option value="white">Branco</option>
+        <option value="red">Vermelho</option>
+        <option value="orange">Laranja</option>
+    </select>
+</div>
+
+<div style="width:150px">
+    <select @bind="@config.TamanhoFonte" class="form-control" style="margin-top:15px">
+        <option value="20px">20</option>
+        <option value="40px">40</option>
+        <option value="60px">60</option>
+        <option value="80px">80</option>
+    </select>
+</div>
+
+@code{
+    //private string Cor = "cyan";
+    //private string Tamanho = "20px";
+    Config config = new Config();
+}

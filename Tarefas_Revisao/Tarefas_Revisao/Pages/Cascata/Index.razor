@@ -1,0 +1,23 @@
+﻿@page "/cascata"
+
+
+<body style="background-color:@config.CorDeFundo">
+    <h3 style="font-size:@config.TamanhoFonte">CascadingValue</h3>
+    @*<CascadingValue Value="@Resposta">*@
+
+
+    @*</CascadingValue>*@
+</body>
+
+@code {
+    [CascadingParameter] Config config { get; set; }
+    string Resposta = "Amar a Deus acima de todas as coisas";
+}
+
+@code{
+     
+//[CascadingParameter(Name ="CorDeFundo")] string CorDeFundo { get; set; }
+//[CascadingParameter(Name = "TamanhoDaFonte")] string TamanhoFonte { get; set; }
+
+
+}

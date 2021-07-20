@@ -1,11 +1,10 @@
-<Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
+<Router AppAssembly="@typeof(Program).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
     </Found>
     <NotFound>
         <LayoutView Layout="@typeof(MainLayout)">
             <p>Sorry, there's nothing at this address.</p>
-            <img src="https://media0.giphy.com/media/aYpmlCXgX9dc09dbpl/200w.webp?cid=ecf05e47a0fpdd4rlbogvlvnzelcapekm7aks3xc97zzk03j&rid=200w.webp&ct=g" alt="Alternate Text" />
         </LayoutView>
     </NotFound>
 </Router>

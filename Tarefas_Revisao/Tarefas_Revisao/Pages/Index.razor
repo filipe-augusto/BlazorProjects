@@ -1,10 +1,12 @@
 ﻿@page "/"
 @inject HttpClient http
-<h1>Tarefas</h1>
-
-<Tarefas tarefas="GetTarefas()" Titulo="Lista de tarefas" />
-
+<body style="background-color:@config.CorDeFundo">
+    <h1 style="font-size:@config.TamanhoFonte">Tarefas</h1>
+    <Tarefas tarefas="GetTarefas()" Titulo="Lista de tarefas" />
+</body>
 @code{
+    [CascadingParameter]
+    Config config { get; set; }
     [Parameter]
     public List<Tarefa> tarefas { get; set; }
 

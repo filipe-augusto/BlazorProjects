@@ -2,22 +2,51 @@
 @page "/formulario1"
 
 <h3>Meu primeiro formulario blazor</h3>
-<EditForm Model="@usuario" onSubmit="Submeter">
-    <label form="nome">usuario</label>
-    <InputText id="nome" @bind-Value="usuario.Nome"></InputText>
-    <br />
-    <label form="nome">Email</label>
-    <InputText id="nome" @bind-Value="usuario.Email"></InputText>
-    <br />
-    <label form="nome">Idade</label>
-    <InputNumber id="nome" @bind-Value="usuario.Idade"></InputNumber>
-    <br />
-    <input type="submit" value="Enviar Formulario" class="btn-primary" />
+
+
+@if (ultimoSubmit != null)
+{
+    <h2>Status do ultimo submit : @ultimoSubmit</h2>
+}
+<EditForm Model="@usuario" OnValidSubmit="ValidFormSubmetido" OnInvalidSubmit="InvalidFormSubmetido">
+    <DataAnnotationsValidator />
+
+    <div class="form-group">
+        <label form="nome">usuario</label>
+        <InputText id="nome" @bind-Value="usuario.Nome" class="form-control" />
+        <ValidationMessage For="() =>usuario.Nome"/>
+    </div>
+    
+    <div class="form-group">
+        <label form="nome">Email</label>
+        <InputText id="nome" @bind-Value="usuario.Email" class="form-control" />
+        <ValidationMessage For="() =>usuario.Email" />
+    </div>
+   
+    <div class="form-group">
+        <label form="nome">Idade</label>
+        <InputNumber id="nome" @bind-Value="usuario.Idade" class="form-control" />
+        <ValidationMessage For="() =>usuario.Idade" />
+    </div>
+   
+    <div class="form-group">
+        <input type="submit" value="Enviar Formulario" class="btn-primary"  />
+        </div>
 </EditForm>
 @code {
     Usuario usuario = new Usuario();
-    private void Submeter()
+    //private void Submeter()
+    //{
+    //    Console.WriteLine($"Submit : {usuario.Nome} - {usuario.Email} - {usuario.Idade}");
+    //}
+
+    string ultimoSubmit;
+    void ValidFormSubmetido(EditContext editContext)
     {
-        Console.WriteLine($"Submit : {usuario.Nome} - {usuario.Email} - {usuario.Idade}");
+        ultimoSubmit = $"OnValidSubmit foi executado! O formulario é valido = {editContext.Validate()}";
+    }
+    void InvalidFormSubmetido(EditContext editContext)
+    {
+        ultimoSubmit = $"OnInValidSubmit foi executado! O formulario é invalido = {editContext.Validate()}";
     }
 }
