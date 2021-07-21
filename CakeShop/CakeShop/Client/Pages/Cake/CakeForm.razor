@@ -1,0 +1,61 @@
+﻿<h3>CakeForm</h3>
+
+<EditForm Model="@cake" OnValidSubmit="@OnvalidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label form="nome">Nome: </label>
+        <div>
+            <InputText id="txtCategoriaNome" @bind-Value="@cake.Name" class="form-control" />
+            <ValidationMessage For="@(()=> cake.Name)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label form="nome">Sabor: </label>
+        <div>
+            <InputText @bind-Value="@cake.Flavor" class="form-control" />
+            <ValidationMessage For="@(()=> cake.Flavor)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label form="nome">Preço: </label>
+        <div>
+            <InputNumber @bind-Value="@cake.Price" class="form-control" />
+            <ValidationMessage For="@(()=> cake.Price)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label form="nome">Dias para Expirar: </label>
+        <div>
+            <InputNumber @bind-Value="@cake.DaysToExpiration" class="form-control" />
+            <ValidationMessage For="@(()=> cake.DaysToExpiration)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label form="nome">Peso: </label>
+        <div>
+            <InputNumber @bind-Value="@cake.Weight" class="form-control" />
+            <ValidationMessage For="@(()=> cake.Weight)" />
+        </div>
+    </div>
+    <hr/>
+    <button type="submit" class="btn btn-success">
+        Salvar
+    </button>
+    <button class="btn btn-danger"
+            @onclick="@(()=> navi.NavigateTo("cake"))">
+        Cancelar
+    </button>
+</EditForm>
+
+
+@code {
+    [Inject]
+    public NavigationManager navi { get; set; }
+    [Parameter]
+    public Cake cake { get; set; }
+    [Parameter]
+    public EventCallback OnvalidSubmit { get; set; }
+
+
+}

@@ -1,0 +1,74 @@
+﻿@page "/cake"
+@inject HttpClient http
+@using System.Text.Json
+
+
+
+<div>
+    <a class="btn btn-success" href="cake/create">Nova Categoria</a>
+</div>
+<br />
+@if (cakes == null)
+{
+    <p>Carregando...</p>
+}
+else if (cakes.Count == 0)
+{
+    <p>Não existem bolos cadastrados...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Sabor</th>
+                <th>Preço</th>
+                <th>Data da preparação</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in cakes)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Flavor</td>
+                    <td>@item.Price</td>
+                    <td>@item.PreparationDate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+@code {
+
+    public List<Cake> cakes { get; set; }
+    protected override async Task OnInitializedAsync()//metodo usado quando ocomponente é inicializado
+    {
+        await GetCakes();
+    }
+
+    async Task GetCakes()
+    {
+        cakes = new List<Cake>();
+        var httpResponse =
+   await http.GetAsync("api/cake");
+        if (httpResponse.IsSuccessStatusCode)
+        {
+
+
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+
+            cakes = JsonSerializer.Deserialize<List<Cake>>(responseString,
+            new JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = true
+            });
+        }
+
+    }
+
+}

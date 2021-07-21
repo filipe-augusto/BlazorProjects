@@ -1,0 +1,19 @@
+﻿@page "/cake/create"
+@inject HttpClient  http
+@inject NavigationManager navigation
+
+<h3>Novo Bolo</h3>
+<CakeForm OnvalidSubmit="@CreateCake" cake="@cake"></CakeForm>
+
+<a></a>
+@code {
+    Cake cake = new Cake();
+
+    async Task CreateCake()
+    {
+        await http.PostAsJsonAsync("api/cake", cake);
+        navigation.NavigateTo("cake");
+    }
+
+
+}

@@ -113,9 +113,9 @@ CRIANDO APLICAÇÃO BLAZOR PARA CATEGORIAS
 14. criar um botao para Criar uma categoria
 15. No @code criar um aarray de categoria
 16 depois criar um metodo para iniciar quando  a pagina for carregada. e quadno a pagina for carregada ela vai preencher o array de categorias chamando o metodo que vai atribuir os dados do banco para o array:
-''''''   protected override Task OnInitializedAsync()//metodo usado quando ocomponente é inicializado
+''''''   protected override async Task OnInitializedAsync()//metodo usado quando ocomponente é inicializado
     {
-        return CarregaCategorias();
+        await GetCakes();
     }
 
     async Task CarregaCategorias()
