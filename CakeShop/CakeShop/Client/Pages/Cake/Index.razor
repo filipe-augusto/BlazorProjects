@@ -1,9 +1,9 @@
 ﻿@page "/cake"
 @inject HttpClient http
 @using System.Text.Json
-
-
-
+@*@inject Sotsera.Blazor.Toaster.IToaster Toaster
+@inject AlertService alertService*@
+@inject IJSRuntime jsRuntime
 <div>
     <a class="btn btn-success" href="cake/create">Nova Categoria</a>
 </div>
@@ -18,57 +18,188 @@ else if (cakes.Count == 0)
 }
 else
 {
+    @*<Toast />*@
     <table class="table">
         <thead>
             <tr>
-                <th>Nome</th>
                 <th>Sabor</th>
                 <th>Preço</th>
                 <th>Data da preparação</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
 
             @foreach (var item in cakes)
             {
-                <tr>
-                    <td>@item.Name</td>
-                    <td>@item.Flavor</td>
-                    <td>@item.Price</td>
-                    <td>@item.PreparationDate</td>
-                </tr>
+            <tr>
+
+                <td>@item.Flavor</td>
+                <td>@item.Price</td>
+                <td>@item.PreparationDate</td>
+              
+                    @*<a @onclick="@(() => EditModal(item))" data-toggle="tooltip" data-placement="right" title="Editar"><i class="feather icon-edit">Editar</i></a> |*@
+                <td>
+                <a class="btn btn-primary" @onclick="@(() => EditModal(item))">Editar</a> |
+                <a class="btn btn-danger" @onclick="@(() => DeleteModal(item))">Deletar</a> 
+                </td>
+                @*<a @onclick="@(() => Remover(item))" data-toggle="tooltip" data-placement="right" title="Deletar"><i class=" feather icon-trash-2 f-w-600 f-16 text-c-red text-h-success"></i></a>*@
+               
+            </tr>
             }
         </tbody>
     </table>
 }
 
 
-@code {
-
-    public List<Cake> cakes { get; set; }
-    protected override async Task OnInitializedAsync()//metodo usado quando ocomponente é inicializado
+<Confirma @ref="confirmaEdit" NomeBotaoConfirmar="Editar" onConfirma="Edit" onCancela="EditCancel" Titulo="Editar Bolo">
+    <h5> Alterar </h5>
+    @if (CakeModel != null)
     {
-        await GetCakes();
+        <div class="row">
+            <div class="col-md-12">
+                <EditForm Model="CakeModel">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <!--!--><label class="form-label" form="flavor"> Sabot: </label>
+                                <input type="text" @bind="CakeModel.Flavor" class="form-control" id="flavor"></input><!--!-->
+                                <!--!--><!--!-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-1">
+                        <div class="col-md-12">
+                            <label form="price">Valor </label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">R$:</span>
+                                </div>
+                                <InputNumber @bind-Value="CakeModel.Price" id="price" class="form-control pl-3" step="0.01" pattern="^\d*(\.\d{0,2})?$" />
+                                <ValidationMessage For="@(() => CakeModel.Price)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-1">
+                        <div class="col-md-12">
+                            <label form="Weight">Peso </label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Kg:</span>
+                                </div>
+                                <InputNumber @bind-Value="CakeModel.Weight" id="Weight" class="form-control pl-3" step="0.01" pattern="^\d*(\.\d{0,2})?$" />
+                                <ValidationMessage For="@(() => CakeModel.Weight)" />
+                            </div>
+                        </div>
+                    </div>
+                </EditForm>
+                </div>
+            </div>
+
     }
 
-    async Task GetCakes()
-    {
-        cakes = new List<Cake>();
-        var httpResponse =
-   await http.GetAsync("api/cake");
-        if (httpResponse.IsSuccessStatusCode)
+    </Confirma>
+<Confirma @ref="confirmaDelete" NomeBotaoConfirmar="Deletar" onConfirma="Delete" onCancela="DeleteCancel" Titulo="Alterar Bolo">
+    <h3>Confirma a remoção do bolo?</h3>
+    </Confirma>
+
+    @code {
+        Confirma confirmaEdit;
+        Confirma confirmaDelete;
+        public List<Cake> cakes { get; set; }
+        public Cake CakeModel { get; set; }
+        protected override async Task OnInitializedAsync()
         {
+            await GetCakes();
+        }
 
-
-            var responseString = await httpResponse.Content.ReadAsStringAsync();
-
-            cakes = JsonSerializer.Deserialize<List<Cake>>(responseString,
-            new JsonSerializerOptions()
+        async Task GetCakes()
+        {
+            cakes = new List<Cake>();
+            var httpResponse =
+       await http.GetAsync("api/cake");
+            if (httpResponse.IsSuccessStatusCode)
             {
-                PropertyNameCaseInsensitive = true
-            });
+                var responseString = await httpResponse.Content.ReadAsStringAsync();
+
+                cakes = JsonSerializer.Deserialize<List<Cake>>(responseString,
+                new JsonSerializerOptions()
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+
+        }
+
+        void DeleteModal(Cake c)
+        {
+            CakeModel = c;
+            confirmaDelete.Exibir();
+        }
+        void DeleteCancel()
+        {
+            confirmaDelete.Ocultar();
+        }
+        async Task Delete()
+        {
+            try
+            {
+                //if (!(await Validacao()))
+                //{
+                //    return;
+                //}
+                await http.DeleteAsync($"api/cake/{CakeModel.IdCake}");
+                confirmaDelete.Ocultar();
+                OnInitializedAsync();
+                StateHasChanged();
+            }
+            catch (Exception ex)
+            {
+                //  alertService.ShowAlert(ex.Message, "Atenção", ToastLevel.Error);
+            }
+            confirmaDelete.Ocultar();
+            // await CarregaModelo();
+        }
+
+
+
+        void EditModal(Cake c)
+        {
+            CakeModel = c;
+            confirmaEdit.Exibir();
+        }
+        void EditCancel()
+        {
+            confirmaEdit.Ocultar();
+        }
+
+        async Task Edit()
+        {
+            try
+            {
+                var httpResponse = await http.PutAsJsonAsync("api/cake", CakeModel);
+                if (httpResponse.IsSuccessStatusCode)
+                {
+                    var responseAsString = await httpResponse.Content.ReadAsStringAsync();
+                    var result = JsonSerializer.Deserialize<Cake>(responseAsString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    //alertService.ShowAlert("Registro alterado com sucesso!", "Sucesso!", ToastLevel.Success);
+                    confirmaEdit.Ocultar();
+                    await OnInitializedAsync();
+                    //   atualizaValores();
+                }
+                else
+                {
+                    //alertService.ShowAlert("Não foi possível editar o lançamento , consulte o administrador do sistema!", "Atenção", ToastLevel.Warning);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                //alertService.ShowAlert(ex.Message, "Atenção", ToastLevel.Error);
+            }
+            // confirmaEditar.Ocultar();
+
         }
 
     }
-
-}

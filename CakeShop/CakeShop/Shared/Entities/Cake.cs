@@ -11,9 +11,6 @@ namespace CakeShop.Shared.Entities
     {
         [Key]
         public int IdCake { get; set; }
-        [Required(ErrorMessage = "O campo nome é obrigatório")]
-        [MaxLength(100)]
-        public string Name { get; set; }
         [Required(ErrorMessage = "O campo sabor é obrigatório")]
         [MaxLength(100)]
         public string Flavor { get; set; }

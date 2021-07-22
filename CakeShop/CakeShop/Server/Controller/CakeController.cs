@@ -1,8 +1,10 @@
 ﻿using CakeShop.Server.Context;
+using CakeShop.Shared.Entidades;
 using CakeShop.Shared.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +40,8 @@ namespace CakeShop.Server.Controller
         [HttpGet("{id}", Name = "GetCake")]
         public async Task<ActionResult<Cake>> Get(int id)
         { return await context.Cake.FirstOrDefaultAsync(x => x.IdCake == id); }
-      [HttpPost]
+
+         [HttpPost]
         public async Task<ActionResult<Cake>> Post(Cake cake)
         {
             cake.PreparationDate = DateTime.Now;
@@ -47,13 +50,37 @@ namespace CakeShop.Server.Controller
             return new CreatedAtRouteResult("GetCake",
                 new { id = cake.IdCake }, cake);
         }
+
         [HttpPut]
         public async Task<ActionResult<Cake>> Put(Cake cake)
         {
-            context.Entry(cake).State = EntityState.Modified;
-            await context.SaveChangesAsync();
-            return Ok(cake);
+            using (IDbContextTransaction dbContextTransaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    try
+                    {
+                        cake.PreparationDate = DateTime.Now;
+                        context.Entry(cake).State = EntityState.Modified;
+                        await context.SaveChangesAsync();
+                        await dbContextTransaction.CommitAsync();
+                        return Ok(cake);
+                    }
+                    catch (Exception ex)
+                    {
+                        await dbContextTransaction.RollbackAsync();
+                        return BadRequest(new RetornoRequisicao { Mensagem = ex.Message, Sucesso = false });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var retorno = new RetornoRequisicao() { Mensagem = ex.Message, Sucesso = false };
+                    return BadRequest(retorno);
+                }
+
+            }
         }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult<Cake>>Delete (int id)
         {

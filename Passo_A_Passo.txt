@@ -124,7 +124,7 @@ CRIANDO APLICAÇÃO BLAZOR PARA CATEGORIAS
     }'''''''
 CRIAR INCLUIR
 17. Criar @page "categoria/create" e @inject httpclient 
-19. criar editform e como model colocar uma categoria instanciada no @code
+19. criar editform e \model colocar uma categoria instanciada no @code
 ''''''''''
 <EditForm Model="@categoria"></EditForm>
 @code { Categoria categoria = new Categoria();}

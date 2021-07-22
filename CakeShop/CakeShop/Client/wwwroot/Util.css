@@ -1,0 +1,124 @@
+﻿body {
+    background: #ecf0f5;
+}
+
+.docs-page-header {
+    font-weight: 400;
+    font-size: 27px;
+    margin: 0;
+    padding: 15px 50px;
+    line-height: 40px;
+    height: 70px;
+}
+
+    .docs-page-header li {
+        line-height: 1;
+    }
+
+        .docs-page-header li a {
+            display: block;
+            padding: 10px 8px;
+        }
+
+    .docs-page-header.bg-dark {
+        background-color: rgb(63, 77, 103) !important;
+        position: fixed;
+        width: 100%;
+        z-index: 999;
+    }
+
+.docs-header-path {
+    opacity: 1;
+}
+
+.docs-wrapper {
+    min-height: calc(100vh - 70px);
+    position: relative;
+    padding-top: 70px;
+}
+
+.docs-inner {
+    padding: 40px;
+}
+
+.docs-sections {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.docs-sections-inner {
+    padding-top: 32px;
+    padding-left: 32px;
+    padding-right: 32px;
+    margin: 0;
+}
+
+    .docs-sections-inner > li:first-child {
+        padding-top: 0 !important;
+    }
+
+    .docs-sections-inner li {
+        list-style: none;
+        padding: 5px 0;
+        margin: 0;
+        font-size: 14px;
+    }
+
+.docs-sections,
+.docs-sections li a,
+.docs-sections li a:focus,
+.docs-sections li a:active {
+    color: #6c757d;
+    line-height: 1.3;
+    padding: 0;
+}
+
+    .docs-sections li a:hover {
+        color: #333;
+        position: relative;
+    }
+
+    .docs-sections li a.active {
+        color: #333;
+        font-weight: bold;
+        position: relative;
+    }
+
+        .docs-sections li a.active:before,
+        .docs-sections li a:hover:before {
+            content: "";
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: #000;
+            border-radius: 50%;
+            top: 8px;
+            left: -15px;
+        }
+
+.docs-page-header,
+.docs-wrapper {
+    min-width: 1200px;
+}
+
+.docs-sections {
+    width: 230px;
+    background: rgba(63, 77, 103, 0.05);
+}
+
+.docs-wrapper {
+    padding-left: 230px;
+}
+
+h2.docs-header {
+    margin-bottom: 32px;
+    font-size: 24px;
+    position: relative;
+}
+
+    h2.docs-header ~ h2.docs-header {
+        margin-top: 50px;
+    }

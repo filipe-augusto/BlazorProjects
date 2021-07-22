@@ -1,0 +1,22 @@
+﻿@inherits ToastBase
+@if (IsVisible)
+{ 
+    <div class="row">
+        <div style="position:absolute;top:40px;right: 40px;z-index:9">
+            <div class="toast  @(IsVisible ? "show" : "hide") toast-right" role="alert" aria-live="assertive" data-delay="10000" aria-atomic="true">
+                <div class="toast-header">
+                    <img src="/favicon.ico" alt="" class="img-fluid m-r-5" style="width:20px;">
+                    <strong class="mr-auto">@Heading</strong>
+                    <small class="text-muted">@DateTime.Now.ToShortTimeString()</small>
+
+                    <button type="button" class="m-l-5 mb-1 mt-1 close" data-dismiss="toast" aria-label="Close">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="toast-body">
+                    @Message
+                </div>
+            </div>
+        </div>
+    </div>
+}

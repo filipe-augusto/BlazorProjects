@@ -1,15 +1,9 @@
-﻿<h3>CakeForm</h3>
+﻿
 
 <EditForm Model="@cake" OnValidSubmit="@OnvalidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <div class="form-group">
-        <label form="nome">Nome: </label>
-        <div>
-            <InputText id="txtCategoriaNome" @bind-Value="@cake.Name" class="form-control" />
-            <ValidationMessage For="@(()=> cake.Name)" />
-        </div>
-    </div>
+
     <div class="form-group">
         <label form="nome">Sabor: </label>
         <div>
