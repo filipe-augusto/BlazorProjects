@@ -39,10 +39,12 @@ else
                 <td>@item.PreparationDate</td>
               
                     @*<a @onclick="@(() => EditModal(item))" data-toggle="tooltip" data-placement="right" title="Editar"><i class="feather icon-edit">Editar</i></a> |*@
-                <td>
-                <a class="btn btn-primary" @onclick="@(() => EditModal(item))">Editar</a> |
-                <a class="btn btn-danger" @onclick="@(() => DeleteModal(item))">Deletar</a> 
-                </td>
+            <td>
+                @*<a class="btn btn-primary" @onclick="@(() => EditModal(item))">Editar</a> |*@
+                <button @onclick="@(() => EditModal(item))" data-toggle="tooltip" data-placement="right" title="Editar" class="btn btn-primary "><span class="oi oi-pencil" aria-hidden="true"></span></button> |
+                <button @onclick="@(() => DeleteModal(item))" data-toggle="tooltip" data-placement="right" title="Deletar" class="btn btn-danger "><span class="oi oi-trash" aria-hidden="true"></span></button> 
+                @*<a class="btn btn-danger" @onclick="@(() => DeleteModal(item))">Deletar</a>*@
+            </td>
                 @*<a @onclick="@(() => Remover(item))" data-toggle="tooltip" data-placement="right" title="Deletar"><i class=" feather icon-trash-2 f-w-600 f-16 text-c-red text-h-success"></i></a>*@
                
             </tr>
