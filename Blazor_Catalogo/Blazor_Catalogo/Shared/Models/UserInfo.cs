@@ -7,12 +7,12 @@ namespace Blazor_Catalogo.Shared.Models
 {
   public class UserInfo
     {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage ="Informe o e=mail")]
+        [EmailAddress (ErrorMessage ="Formatado do email invalido!")]
         public string  Email { get; set; }
 
-        [Required]
-      
+        [Required(ErrorMessage = "Informe a senha")]
         public string Password { get; set; }
+      
     }
 }

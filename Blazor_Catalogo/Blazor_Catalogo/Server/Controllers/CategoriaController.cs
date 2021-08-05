@@ -2,6 +2,8 @@
 using Blazor_Catalogo.Server.Utils;
 using Blazor_Catalogo.Shared.Models;
 using Blazor_Catalogo.Shared.Recursos;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ namespace Blazor_Catalogo.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class CategoriaController : ControllerBase
     {
         private readonly AppDbContext context;
@@ -21,6 +24,7 @@ namespace Blazor_Catalogo.Server.Controllers
         }
 
         [HttpGet("todas")]
+        [AllowAnonymous]
         public  async Task<ActionResult<List<Categoria>>> Get()
         {
             return await context.Categorias.AsNoTracking().ToListAsync();
@@ -28,6 +32,7 @@ namespace Blazor_Catalogo.Server.Controllers
 
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<List<Categoria>>> Get([FromQuery] Paginacao paginacao, 
             [FromQuery] string nome)
         {
