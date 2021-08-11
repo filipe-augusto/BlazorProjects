@@ -2,6 +2,21 @@
     alert(`${symbol}: $${price}!`);
 };
 
+
+window.displayRanger = () => {
+    $('#ex20a').on('click', function (e) {
+        $('#ex20a')
+            .parent()
+            .find(' >.card')
+            .toggleClass()
+            .find('input')
+            .slider('relayout');
+      /*  e.preventDefault();*/
+    });
+}
+
+
+
 window.displayCarregaGrafico = (dataa) => {
    $(document).ready(function () {
         var options = {
@@ -42,9 +57,9 @@ window.displayCarregaGrafico = (dataa) => {
     });
 };
 
-window.displayCarregaGrafico2 = (dataa) => {
-    dat = JSON.parse(dataa)
-  //  $(document).ready(function () {
+window.displayCarregaGrafico2 = () => {
+   // dat = JSON.parse(dataa)
+    $(document).ready(function () {
         // [ besic-pie-chart ] Start
         Highcharts.chart('chart-highchart-pie1', {
             chart: {
@@ -100,6 +115,6 @@ window.displayCarregaGrafico2 = (dataa) => {
 
         });
         // [ basic-pie-chart ] end
-   // });
+    });
 
 };
