@@ -39,6 +39,8 @@ namespace Blazor_Admin
 
             var sqlConnectinConfiguration = new SqlConnectionConfiguration(
                 Configuration.GetConnectionString("SqlDbContext"));
+
+            services.AddSingleton(sqlConnectinConfiguration);
             
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
