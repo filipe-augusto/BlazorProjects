@@ -1,47 +1,53 @@
-﻿using Blazor_Admin.Data;
-using Blazor_Admin.Data.Models;
+﻿using Blazor_Admin.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace Blazor_Admin.Services
+namespace Blazor_Admin.Data.Services
 {
     public class UserService : IUserService
     {
-        private SqlConnectionConfiguration _configuration;
-
+        private readonly SqlConnectionConfiguration _configuration;
         public UserService(SqlConnectionConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public async Task<bool> DeleteUser(Guid id)
+        public async Task<List<User>> GetUsers()
         {
-
             try
             {
-                User user = new User();
-                using (SqlConnection con = new SqlConnection(_configuration.ConnectionString))
+                List<User> users = new List<User>();
+                using (SqlConnection con = new
+                    SqlConnection(_configuration.ConnectionString))
                 {
-                    const string query = "delete from dbo.AspNetUsers where Id = @Id";
+                    const string query = "select * from dbo.AspNetUsers";
                     SqlCommand cmd = new SqlCommand(query, con)
                     {
-                        CommandType = CommandType.Text,
+                        CommandType = CommandType.Text
                     };
-                    cmd.Parameters.AddWithValue("@Id", id);
-                    con.Open();
-                int result =  await cmd.ExecuteNonQueryAsync();
 
+                    con.Open();
+                    SqlDataReader rdr = await cmd.ExecuteReaderAsync();
+                    while (rdr.Read())
+                    {
+                        User user = new User
+                        {
+                            Id = Guid.Parse(rdr["Id"].ToString()),
+                            UserName = rdr["UserName"].ToString(),
+                            Email = rdr["Email"].ToString(),
+                            RoleId = new Guid()
+                        };
+                        users.Add(user);
+                    }
                     cmd.Dispose();
                 }
-                return true;
+                return users;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
                 throw;
             }
         }
@@ -51,16 +57,17 @@ namespace Blazor_Admin.Services
             try
             {
                 User user = new User();
-                using (SqlConnection con = new SqlConnection(_configuration.ConnectionString))
+                using (SqlConnection con =
+                    new SqlConnection(_configuration.ConnectionString))
                 {
                     const string query = "select * from dbo.AspNetUsers where Id = @Id";
+
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {
                         cmd.CommandType = CommandType.Text;
                         cmd.Parameters.AddWithValue("@Id", id);
                         con.Open();
-
-                        using(SqlDataReader rdr = await cmd.ExecuteReaderAsync())
+                        using (SqlDataReader rdr = await cmd.ExecuteReaderAsync())
                         {
                             if (rdr.Read())
                             {
@@ -69,50 +76,41 @@ namespace Blazor_Admin.Services
                                 user.Email = rdr["Email"].ToString();
                             }
                         }
-
                     }
                 }
                 return user;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
                 throw;
             }
         }
 
-        public async Task<List<User>> GetUsers()
+        public async Task<bool> DeleteUser(Guid id)
         {
             try
             {
-                List<User> users = new List<User>();
-                using (SqlConnection con = new SqlConnection(_configuration.ConnectionString))
+                using (SqlConnection con =
+                    new SqlConnection(_configuration.ConnectionString))
                 {
-                    const string query = "select * from dbo.AspNetUsers";
+                    const string query = "delete FROM dbo.AspNetUsers Where Id=@Id";
                     SqlCommand cmd = new SqlCommand(query, con)
                     {
-                        CommandType = CommandType.Text
+                        CommandType = CommandType.Text,
                     };
+
+                    cmd.Parameters.AddWithValue("@Id", id);
+
                     con.Open();
-                    SqlDataReader rdr = await cmd.ExecuteReaderAsync();
-                    while (rdr.Read())
-                    {
-                        User usuario = new User
-                        {
-                            Id = Guid.Parse(rdr["Id"].ToString()),
-                            UserName = rdr["UserName"].ToString(),
-                            Email = rdr["Email"].ToString(),
-                            RoleId = new Guid()
-                        };
-                        users.Add(usuario);
-                    }
+                    int result = await cmd.ExecuteNonQueryAsync();
+
+                    //con.Close();
                     cmd.Dispose();
                 }
-                return users;
+                return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
                 throw;
             }
         }
@@ -121,27 +119,27 @@ namespace Blazor_Admin.Services
         {
             try
             {
-          //      User user = new User();
-                using (SqlConnection con = new SqlConnection(_configuration.ConnectionString))
+                using (SqlConnection con =
+                    new SqlConnection(_configuration.ConnectionString))
                 {
-                    const string query = "insert into dbo.AspNetUsersRoles (UserId,RoleId) values (@UserId, @RoleId)";
-
+                    const string query = "insert into dbo.AspNetUserRoles " +
+                        "(UserId,RoleId) values(@UserId, @RoleId)";
 
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {
                         cmd.CommandType = CommandType.Text;
+
                         cmd.Parameters.AddWithValue("@UserId", id);
                         cmd.Parameters.AddWithValue("@RoleId", user.RoleId);
+
                         con.Open();
                         int result = await cmd.ExecuteNonQueryAsync();
                     }
-
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
                 throw;
             }
         }

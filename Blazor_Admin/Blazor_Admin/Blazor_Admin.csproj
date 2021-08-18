@@ -2,23 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UserSecretsId>aspnet-Blazor_Admin-39D3F6B6-498D-4D1C-90B2-B2B2FB21D070</UserSecretsId>
+    <UserSecretsId>aspnet-Blazor_Admin-D88C3FB7-B769-45F5-B925-7E07E93BDBD8</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\images\basicloader.gif" />
-    <None Include="wwwroot\images\naoautorizado1.jpg" />
-    <None Include="wwwroot\images\notfound.jpg" />
-    <None Include="wwwroot\images\roles.png" />
-    <None Include="wwwroot\images\roleuser.jpg" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.17" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.17" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.17" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.17" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.0" />
   </ItemGroup>
 

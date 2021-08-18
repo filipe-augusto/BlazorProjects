@@ -1,5 +1,6 @@
 ﻿window.displayTickerAlert1 = (symbol, price) => {
     alert(`${symbol}: $${price}!`);
+    
 };
 
 

@@ -1,0 +1,111 @@
+﻿@page "/"
+@inject IJSRuntime jsRuntime
+
+
+<p>
+    <button @onclick="SetStock">Set Stock</button>
+</p>
+<p>
+    <button @onclick="Hoje">Dia de hoje</button>
+</p>
+<p>
+    <button @onclick="ChamaoConfirma">confirma</button>
+</p>
+
+
+Peso:
+<input type="number"@bind-value="Peso" />
+Altura:
+<input type="number" @bind-value="Altura" />
+<p>
+    <button @onclick="CalculaIMC">IMC</button>
+</p>
+@if (IMC != null)
+{
+    <h5>IMC: @IMC</h5>
+}
+
+@if (stockSymbol != null)
+{
+    <p>@stockSymbol price: @price.ToString("c")</p>
+}
+
+@if (data != null)
+{
+    <p id="hoje">Hoje : @data</p>
+}
+
+@if (textoQualquer != null)
+{
+    <p id="texto"> @textoQualquer</p>
+}
+
+
+
+@code{
+    private Random r = new Random();
+    private string stockSymbol;
+    private decimal price;
+    private string data;
+    private string textoQualquer;
+    static int totalTarefas = 0;
+    decimal Peso;
+    decimal Altura;
+    decimal IMC;
+
+    protected override async Task OnInitializedAsync()
+    {
+        totalTarefas = r.Next(10, 100);
+        //await Focus("selectFuncionario");
+    }
+
+
+    private async Task CalculaIMC()
+    {
+     //   Altura = Altura * Altura;
+        
+        await jsRuntime.InvokeVoidAsync("CalculaIMCJS", Altura, Peso);
+    }
+
+    private async Task ChamaoConfirma()
+    {
+        var result =
+        await jsRuntime.InvokeAsync<bool>("confirm", "Confirma uma exclusão?");
+
+        if (result)
+        {
+            textoQualquer = result.ToString() + "excluido!!!";
+        }
+    }
+
+
+
+    private async Task Hoje()
+    {
+        DateTime datehoje = DateTime.Now;
+        await jsRuntime.InvokeVoidAsync("ExibeData", datehoje.ToString());
+        totalTarefas = r.Next(10, 100);
+        await jsRuntime.InvokeVoidAsync("GetTotalTarefas");
+    }
+
+    private async Task SetStock()
+    {
+        stockSymbol = "Produto";
+        //  $"{(char)('A' + r.Next(0, 26))}{(char)('A' + r.Next(0, 26))}";
+        price = 5;
+        //r.Next(1, 101);
+        await jsRuntime.InvokeVoidAsync("displayTickerAlert1", stockSymbol, price);
+    }
+
+    [JSInvokable]
+    public static Task<int> ObterTotalTarefas()
+    {
+        return Task.FromResult(totalTarefas);
+    }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //    await jsRuntime.InvokeVoidAsync("displayAlerta");
+    }
+}
