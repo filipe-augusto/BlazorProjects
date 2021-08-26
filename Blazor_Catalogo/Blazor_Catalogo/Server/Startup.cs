@@ -17,8 +17,7 @@ using System.Text;
 namespace Blazor_Catalogo.Server
 {
     public class Startup
-    {
-   
+    { 
         private readonly IConfiguration configuration;
         public Startup(IConfiguration configuration)
         {

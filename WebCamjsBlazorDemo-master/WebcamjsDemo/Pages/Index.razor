@@ -1,0 +1,98 @@
+﻿@page "/"
+@inject IJSRuntime JSRuntime
+
+<button @onclick="Capture">Capture</button>
+
+
+<div class="col-md-2"></div>
+<div class="col-md-4">
+    <div class="panel panel-default">
+        <div class="panel-heading">Camera</div>
+        <div class="panel-body" style="display:@condicao;">
+            <div id="camera"></div>
+
+            <!-- A button for taking snaps -->
+        </div>
+        <div class="panel-body" style="display:@condicao2;">
+            @if (foto != null)
+            {
+            <img src="@foto" alt="Foto" width="400px;" height="400px;"  />
+            }
+            else
+            {
+                <p>Ops!</p>
+            }
+        </div>
+        </div>
+    </div>
+
+
+
+
+
+@code
+{ List<string> stringList = new List<string>();
+    bool someCamera = false;
+    string condicao = "block";
+    string condicao2 = "none";
+    string foto;
+  //  string aa = "";
+    public async void Capture()
+    {
+        someCamera = !someCamera;
+
+        if (someCamera)
+        {
+            condicao = "none";
+            condicao2 = "block";
+           foto = await JSRuntime.InvokeAsync<string>("take_snapshot");
+        }
+        else
+        {
+            condicao = "block";
+            condicao2 = "none";
+
+        }
+        StateHasChanged();
+        //    OnAfterRender(true);
+        //if (someCamera)
+        //{
+        //    someCamera = !someCamera;
+        //    return;
+        //}
+        //else{
+        //    someCamera = !someCamera;
+        //    try
+        //    {
+        //        foto = await JSRuntime.InvokeAsync<string>("take_snapshot");
+        //        StateHasChanged();
+        //        Console.WriteLine("Tirou a foto!");
+        //    }
+        //    catch
+        //    {
+        //        Console.WriteLine("Deu erro!");
+        //        //  stringList.Add(await JSRuntime.InvokeAsync<string>("take_snapshot"));
+        //        StateHasChanged();
+        //    }
+        //}
+
+
+
+
+        StateHasChanged();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            JSRuntime.InvokeVoidAsync("ready", this);
+        }
+        else
+        {
+            JSRuntime.InvokeVoidAsync("ready", this);
+        }
+    } }
+
+
+
