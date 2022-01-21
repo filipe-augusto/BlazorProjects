@@ -1,5 +1,5 @@
 ﻿@page "/"
-@implements  IDisposable
+@implements IDisposable
 
 <h1>@Titulo</h1>
 <h2>
@@ -24,15 +24,25 @@
         // Titulo = "Olá Blazor";
     }
 
-    protected override void OnAfterRender(bool firstRender)
+   async protected override void OnAfterRender(bool firstRender)
     {
-        HoraRenderizacao = DateTime.Now.ToLongTimeString();
-        Console.WriteLine($"executei OnAfterRender primeira vez =  {firstRender}");
-        Console.WriteLine($"---> termino da renderização do componente  : às {HoraRenderizacao}");
+        while (true)
+        {
+            await Task.Delay(1000);
+            HoraRenderizacao = DateTime.Now.ToLongTimeString();
+            Console.WriteLine($"executei OnAfterRender primeira vez =  {firstRender}");
+            Console.WriteLine($"---> termino da renderização do componente  : às {HoraRenderizacao}");
+
+        }
     }
-    public void Dispose()
+    async Task Dispose()
     {
-        HoraRenderizacao = DateTime.Now.ToLongTimeString();
-        Console.WriteLine($" ---> liveração do componente : às {HoraRenderizacao}");
+        while (true)
+        {
+            await Task.Delay(1000);
+            HoraRenderizacao = DateTime.Now.ToLongTimeString();
+            Console.WriteLine($" ---> liveração do componente : às {HoraRenderizacao}");
+        }
+
     }
 }

@@ -46,3 +46,5 @@ window.convertArray = (win1251Array) => {
     console.log(decodedArray);
     return decodedArray;
 };
+
+

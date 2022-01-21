@@ -1,0 +1,53 @@
+﻿@page "/temporizador"
+
+<h1>Timer</h1>
+
+
+
+<p>@counter</p>
+<button @onclick="StartTimer">Start</button>
+
+
+@code {
+
+
+
+    private static System.Timers.Timer aTimer;
+    private int counter = 60;
+
+    protected override async Task OnInitializedAsync()
+    {
+        StartTimer();
+    }
+
+    public void StartTimer()
+    {
+        aTimer = new System.Timers.Timer(5000);
+        aTimer.Elapsed += CountDownTimer;
+        aTimer.Enabled = true;
+    }
+
+   async void carregamodel()
+    {
+        //await Task.Delay(2000);
+
+        Console.WriteLine($"teste {counter}");
+
+    }
+
+    async public void CountDownTimer(Object source, System.Timers.ElapsedEventArgs e)
+    {
+
+        if (counter > 0)
+        {
+            counter -= 1;
+           carregamodel();
+        }
+        else
+        {
+            aTimer.Enabled = false;
+        }
+        InvokeAsync(StateHasChanged);
+    }
+
+}

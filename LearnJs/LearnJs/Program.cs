@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LearnJs
@@ -14,6 +15,7 @@ namespace LearnJs
     {
         public static async Task Main(string[] args)
         {
+           // Thread 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 

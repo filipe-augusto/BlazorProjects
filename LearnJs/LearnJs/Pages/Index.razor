@@ -2,6 +2,12 @@
 @inject IJSRuntime jsRuntime
 
 
+
+<SelectStar></SelectStar>
+<button> C</button>
+<p>
+    @temporizador
+</p>
 <p>
     <button @onclick="SetStock">Set Stock</button>
 </p>
@@ -14,7 +20,7 @@
 
 
 Peso:
-<input type="number"@bind-value="Peso" />
+<input type="number" @bind-value="Peso" />
 Altura:
 <input type="number" @bind-value="Altura" />
 <p>
@@ -43,6 +49,7 @@ Altura:
 
 
 @code{
+    SelectStar s;
     private Random r = new Random();
     private string stockSymbol;
     private decimal price;
@@ -52,18 +59,39 @@ Altura:
     decimal Peso;
     decimal Altura;
     decimal IMC;
+    int temporizador;
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await jsRuntime.InvokeVoidAsync("CarregaSelectEstrelas");
+            await base.OnAfterRenderAsync(firstRender);
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
         totalTarefas = r.Next(10, 100);
+
         //await Focus("selectFuncionario");
+        //Thread t = new Thread(Teste);
+        //t.Start();
     }
 
-
+    void Teste()
+    {
+        while (true)
+        {
+            temporizador++;
+            Console.WriteLine(temporizador);
+        }
+    }
     private async Task CalculaIMC()
     {
-     //   Altura = Altura * Altura;
-        
+        //   Altura = Altura * Altura;
+
         await jsRuntime.InvokeVoidAsync("CalculaIMCJS", Altura, Peso);
     }
 
@@ -104,8 +132,5 @@ Altura:
     }
 
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        //    await jsRuntime.InvokeVoidAsync("displayAlerta");
-    }
+
 }
