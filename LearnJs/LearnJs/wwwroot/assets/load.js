@@ -125,6 +125,6 @@
 
 window.QuantidadeEstrelas = () => {
     var quantidade = document.querySelector("#selectEstrela").value;
-    alert(quantidade);
+  
     return parseInt(quantidade);
 };

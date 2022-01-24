@@ -1,0 +1,62 @@
+﻿
+@page "/"
+@inject HttpClient client
+<img src="/images/upload1.jpg" />
+
+<h3>Upload de Arquivos</h3>
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <InputFile OnChange="HandleSelection"></InputFile>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <h5>@status</h5>
+    </div>
+</div>
+
+<ul>
+
+    @if (func != null)
+    {
+        @foreach (var item in func)
+        {
+            <li>@item.EmpId - @item.Name</li>
+        }
+    }
+
+</ul>
+
+@code{
+    string status;
+    List<Funcionarios> func = new List<Funcionarios>();
+
+
+    async Task HandleSelection(IFileListEntry[] files)
+    {
+        var file = files.FirstOrDefault();
+        if (file != null)
+        {
+            //byte[] bytes;
+            var ms = new MemoryStream();
+            await file.Data.CopyToAsync(ms);
+            Stream bytes = new MemoryStream(ms.ToArray());
+            status = $"Foram enviados {file.Size} bytes do arquivo {file.Name}. {file.RelativePath}";
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                HasHeaderRecord = true,
+            };
+
+            using (var reader = new StreamReader(bytes))
+            using (var csv = new CsvReader(reader, config))
+            {
+                {
+                    func = csv.GetRecords<Funcionarios>().ToList();
+                }
+            }
+        }
+    }
+
+
+}
+

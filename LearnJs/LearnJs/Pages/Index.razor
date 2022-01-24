@@ -2,9 +2,7 @@
 @inject IJSRuntime jsRuntime
 
 
-
-<SelectStar></SelectStar>
-<button> C</button>
+@*<button> C</button>
 <p>
     @temporizador
 </p>
@@ -44,12 +42,18 @@ Altura:
 @if (textoQualquer != null)
 {
     <p id="texto"> @textoQualquer</p>
-}
+}*@
 
+
+<SelectStar quantidade="quantidadeEstrelas"></SelectStar>
+<h1>@quantidadeEstrelas</h1>
+
+<button @onclick="TesteQnt">teste</button>
 
 
 @code{
     SelectStar s;
+    int quantidadeEstrelas;
     private Random r = new Random();
     private string stockSymbol;
     private decimal price;
@@ -62,14 +66,21 @@ Altura:
     int temporizador;
 
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    public async Task<int> TesteQnt()
     {
-        if (firstRender)
-        {
-            await jsRuntime.InvokeVoidAsync("CarregaSelectEstrelas");
-            await base.OnAfterRenderAsync(firstRender);
-        }
+        quantidadeEstrelas = await jsRuntime.InvokeAsync<int>("QuantidadeEstrelas");
+        return quantidadeEstrelas;
     }
+
+
+    //protected override async Task OnAfterRenderAsync(bool firstRender)
+    //{
+    //    if (firstRender)
+    //    {
+    //        await jsRuntime.InvokeVoidAsync("CarregaSelectEstrelas");
+    //        await base.OnAfterRenderAsync(firstRender);
+    //    }
+    //}
 
     protected override async Task OnInitializedAsync()
     {
